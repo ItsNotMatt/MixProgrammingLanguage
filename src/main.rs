@@ -4,6 +4,8 @@ use std::{fs::File, io::Read};
 
 mod lexer;
 mod ast;
+mod parser;
+mod error;
 
 fn main() {
     let dir = std::env::current_dir().unwrap();
@@ -16,9 +18,12 @@ fn main() {
     let src: Vec<char> = contents.chars().collect();
     let mut lexer = lexer::Lexer::new(src);
     let tokens = lexer.tokenize();
-    for token in tokens {
-        println!("Token: {:?}", token);
-    }
+//    for token in &tokens {
+//        println!("Token: {:?}", token);
+//    }
+
+    let mut parser = parser::Parser::new(tokens);
+    parser.parse_tokens();
   
 
 }
