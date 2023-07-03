@@ -1,11 +1,11 @@
 use std::{collections::{HashMap, hash_map::DefaultHasher}, hash::{Hash, Hasher}};
 
-use crate::data_types::{Variable, Function, BuiltInFunction};
+use crate::data_types::{Variable, Function, NativeFunction};
 
 pub struct Cache {
     variables: HashMap<u64, Variable>,
     functions: HashMap<u64, Function>,
-    built_in_functions: HashMap<u64, BuiltInFunction>,
+    native_functions: HashMap<u64, NativeFunction>,
 }
 
 impl Cache {
@@ -13,7 +13,7 @@ impl Cache {
         Self {
             variables: HashMap::new(),
             functions: HashMap::new(),
-            built_in_functions: HashMap::new(),
+            native_functions: HashMap::new(),
         }
     }
 
@@ -31,6 +31,11 @@ impl Cache {
         else {
             panic!("Not able to get var from string");
         }
+    }
+
+    pub fn add_native_fn(&mut self, func: NativeFunction) {
+        println!("Adding native func");
+        self.native_functions.insert(func.hash, func);
     }
 
 }

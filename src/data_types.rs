@@ -75,13 +75,13 @@ impl Function {
     }
 }
 
-pub struct BuiltInFunction { 
+pub struct NativeFunction { 
     name: String,
     pub hash: u64,
     pub func: Box<dyn Fn()>,
 }
 
-impl BuiltInFunction {
+impl NativeFunction {
     pub fn new(identifier: String, func: Box<dyn Fn()>) -> Self {
         let mut s = DefaultHasher::new();
         identifier.hash(&mut s);

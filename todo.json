@@ -1,13 +1,13 @@
 [
   {
     "id": 1,
-    "title": "need to eval expression before returning it",
+    "title": "Parser: maybe remove after we peek forward one so we dont double check?",
     "additionalNotes": null,
     "completed": false
   },
   {
     "id": 2,
-    "title": "Parser: maybe remove after we peek forward one so we dont double check?",
+    "title": "Native functions can be done with the AST or in this case injection",
     "additionalNotes": null,
     "completed": false
   }
