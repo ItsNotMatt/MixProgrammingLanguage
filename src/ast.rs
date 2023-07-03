@@ -31,7 +31,7 @@ pub struct BinExpr {
 //Tokens
 //////////////////////////////////////////////////
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
-pub enum KeyWord {
+pub enum Key {
     For,
     Let,
     While,
@@ -44,7 +44,6 @@ pub enum KeyWord {
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
 pub enum Operator {
     Arithmetic(ArithmeticOperator),
-    Equals,
     Comparison(ComparisonOperator),
 }
 
@@ -52,7 +51,6 @@ impl fmt::Display for Operator {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Operator::Arithmetic(o) => write!(f, "{}", o),
-            Operator::Equals => write!(f, "="),
             Operator::Comparison(c) => write!(f, "{:?}", c),
         }
     }

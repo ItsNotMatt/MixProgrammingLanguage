@@ -7,6 +7,8 @@ mod ast;
 mod parser;
 mod error;
 mod evaluator;
+mod runtime;
+mod data_types;
 
 fn main() {
     let dir = std::env::current_dir().unwrap();
@@ -19,12 +21,9 @@ fn main() {
     let src: Vec<char> = contents.chars().collect();
     let mut lexer = lexer::Lexer::new(src);
     let tokens = lexer.tokenize();
-//    for token in &tokens {
-//        println!("Token: {:?}", token);
-//    }
 
-    let mut parser = parser::Parser::new(tokens);
+    let mut cache = runtime::cache::Cache::new();
+    let mut parser = parser::Parser::new(tokens, cache);
     parser.parse_tokens();
-  
 
 }

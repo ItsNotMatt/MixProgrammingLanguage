@@ -1,4 +1,4 @@
-use crate::ast::{Operator, KeyWord, ArithmeticOperator};
+use crate::ast::{Operator, Key, ArithmeticOperator};
 
 pub struct Lexer {
     position: usize,
@@ -12,8 +12,8 @@ pub enum Token {
     Number(i32),
     Identifier(String),
     Operator(Operator),
-    Assignment,
-    Keyword(KeyWord),
+    Equal,
+    Keyword(Key),
     OParen,
     CParen,
     OBracket,
@@ -37,19 +37,19 @@ impl Lexer {
     fn check_for_keyword(&mut self, identifier: &str) -> Option<Token> {
         match identifier {
             "let" => {
-                return Some(Token::Keyword(KeyWord::Let));
+                return Some(Token::Keyword(Key::Let));
             }
             "if" => {
-                return Some(Token::Keyword(KeyWord::If));
+                return Some(Token::Keyword(Key::If));
             }
             "else" => {
-                return Some(Token::Keyword(KeyWord::Else));
+                return Some(Token::Keyword(Key::Else));
             }
             "for" => {
-                return Some(Token::Keyword(KeyWord::For));
+                return Some(Token::Keyword(Key::For));
             }
             "while" => {
-                return Some(Token::Keyword(KeyWord::While));
+                return Some(Token::Keyword(Key::While));
             }
             _ => {
                 return None;
@@ -129,7 +129,7 @@ impl Lexer {
                     tokens.push(Token::Operator(Operator::Arithmetic(ArithmeticOperator::Div)));
                 }
                 '=' => {
-                    tokens.push(Token::Operator(Operator::Equals));
+                    tokens.push(Token::Equal);
                 }
                 '{' => {
                     tokens.push(Token::OCurly);
