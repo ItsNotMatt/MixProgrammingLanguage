@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 
 use std::{fs::File, io::Read};
+use std::env;
 
 mod lexer;
 mod ast;
@@ -19,10 +20,18 @@ fn main() {
     let mut contents = String::new();
     file.read_to_string(&mut contents).unwrap();
 
-    //turn file into chars to be tokenized
-    let src: Vec<char> = contents.chars().collect();
-    let mut lexer = lexer::Lexer::new(src);
-    let tokens = lexer.tokenize();
+    //get args  arg should be -- -t     -t to just tokenize, no args means run code
+    let args: Vec<String> = env::args().collect();
+    if args.len() > 1 && args[1] == "-t" {
+        println!("Just tokenizing");
+        let tokens = tokenize(contents);
+        for token in tokens {
+            println!("Token: {:?}", token);
+        }
+        return
+    }
+
+    let tokens = tokenize(contents);
 
     //create cache and import io into cache
     let mut cache = runtime::cache::Cache::new();
@@ -33,3 +42,13 @@ fn main() {
     parser.parse_tokens();
 
 }
+
+fn tokenize(contents: String) -> Vec<lexer::Token> {
+    //turn file into chars to be tokenized
+    let src: Vec<char> = contents.chars().collect();
+    let mut lexer = lexer::Lexer::new(src);
+    let tokens = lexer.tokenize();
+    return tokens;
+}
+
+

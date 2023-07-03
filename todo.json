@@ -22,5 +22,11 @@
     "title": "might change the identifier case in parse tokens to instead do all the logic in a seperate fn to keep parse tokens clean",
     "additionalNotes": null,
     "completed": false
+  },
+  {
+    "id": 5,
+    "title": "For $vars put them into a vec and repeat the statement with the next index",
+    "additionalNotes": null,
+    "completed": false
   }
 ]

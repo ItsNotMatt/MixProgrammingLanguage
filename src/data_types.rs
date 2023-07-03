@@ -58,37 +58,21 @@ impl Variable {
 }
 
 pub struct Function { 
-    name: String,
+    pub name: String,
     pub hash: u64,
     pub func: Box<dyn Fn()>,
+    pub native: bool,
 }
 
 impl Function {
-    pub fn new(identifier: String, func: Box<dyn Fn()>) -> Self {
+    pub fn new(identifier: String, func: Box<dyn Fn()>, native: bool) -> Self {
         let mut s = DefaultHasher::new();
         identifier.hash(&mut s);
         Self {
             name: identifier,
             hash: s.finish(),
             func,
-        }
-    }
-}
-
-pub struct NativeFunction { 
-    name: String,
-    pub hash: u64,
-    pub func: Box<dyn Fn()>,
-}
-
-impl NativeFunction {
-    pub fn new(identifier: String, func: Box<dyn Fn()>) -> Self {
-        let mut s = DefaultHasher::new();
-        identifier.hash(&mut s);
-        Self {
-            name: identifier,
-            hash: s.finish(),
-            func,
+            native,
         }
     }
 }

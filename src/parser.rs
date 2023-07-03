@@ -4,6 +4,7 @@
 use crate::{lexer::Token, ast::{Expr, BinExpr, Operator, Key, Identifier}, error::ParseError, evaluator::eval_bin_expr, runtime::cache::Cache};
 
 mod variable;
+mod function;
 
 pub struct Parser {
     tokens: Vec<Token>,
@@ -32,20 +33,7 @@ impl Parser {
             println!("Parsing Token: {:?}", token);
             match token {
                 Token::Identifier(s) => {
-                    match self.parse_identifier(s) {
-                        Identifier::Variable(hash) => {
-                            let var = self.cache.get_var_from_hash(hash);
-                            println!("Found variable {:?}", var);
-                        }
-                        Identifier::Fn(hash) => {
-                            let func = self.cache.get_fn_from_hash(hash);
-                            println!("Found fn");
-                        }
-                        Identifier::NativeFn(hash) => {
-                            let func = self.cache.get_native_fn_from_hash(hash);
-                            println!("Found native fn");
-                        }
-                    }
+                    self.parse_identifier(s);
                 }
                 Token::Keyword(k) => {
                     self.parse_keyword(k);
@@ -140,15 +128,12 @@ impl Parser {
         }
     }
 
-    fn parse_identifier(&mut self, identifier: String) -> Identifier {
+    fn parse_identifier(&mut self, identifier: String) {
         if let Some(hash) = self.cache.get_var_hash(&identifier) {
-            return Identifier::Variable(hash);
+            variable::edit_var(self, hash);
         }
         else if let Some(hash) = self.cache.get_fn_hash(&identifier) {
-            return Identifier::Fn(hash);
-        }
-        else if let Some(hash) = self.cache.get_native_fn_hash(&identifier) {
-            return Identifier::NativeFn(hash);
+            function::parse_function(self, hash);
         }
         else {
             panic!("Cant find identifier in this context.");
