@@ -46,5 +46,11 @@
     "title": "Parser: Can simply making bin expr if I just return when I hit something not valid so I dont have to peek ahead",
     "additionalNotes": null,
     "completed": false
+  },
+  {
+    "id": 9,
+    "title": "for scope can create new scope when needed and assign it an id and a parent scope",
+    "additionalNotes": null,
+    "completed": false
   }
 ]

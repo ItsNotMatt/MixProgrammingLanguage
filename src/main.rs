@@ -39,7 +39,7 @@ fn main() {
 
     //create parser and give values to cache from parser
     let mut parser = parser::Parser::new(tokens, cache);
-    parser.parse_tokens();
+    parser.parse_tokens(None);
 
 }
 

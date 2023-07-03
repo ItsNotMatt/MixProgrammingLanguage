@@ -11,6 +11,7 @@ pub struct Parser {
     tokens: Vec<Token>,
     expression: Option<Expr>,
     statements: Vec<Expr>,
+    nest: usize,
     cache: Cache,
 }
 
@@ -20,6 +21,7 @@ impl Parser {
             tokens,
             expression: None,
             statements: Vec::new(),
+            nest: 0,
             cache,
         }
     }
@@ -31,7 +33,7 @@ impl Parser {
         return None
     }
 
-    pub fn parse_tokens(&mut self) {
+    pub fn parse_tokens(&mut self, nest_start:  Option<usize>) {
         while let Some(token) = self.next_token() {
             println!("Parsing Token: {:?}", token);
             match token {
@@ -52,12 +54,10 @@ impl Parser {
                     continue;
                 }
                 Token::OCurly => {
-                    //will create new scope later
-                    continue;
+                   self.nest += 1; 
                 }
                 Token::CCurly => {
-                    //will create new scope later
-                    continue;
+                    self.nest -= 1;
                 }
                 Token::Eof => {
                     println!("End of file");
@@ -67,6 +67,13 @@ impl Parser {
                     panic!("Cant parse token");
                 }
             }
+            if let Some(n) = nest_start {
+                println!("Curr nest {}, start: {}", self.nest, n);
+                if self.nest == n {
+                    println!("breaking from current loop");
+                    break;
+                }
+            } 
         }
     }
 

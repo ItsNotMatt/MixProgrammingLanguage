@@ -8,6 +8,7 @@ pub fn parse_if(parser: &mut Parser) {
         Expr::Bool(b) => {
             if b {
                 println!("statement is true, entering if statement");
+                parser.parse_tokens(Some(parser.nest));//so the if statement can know when its over
             }
             else {
                 println!("statement is false, skipping if statement");
