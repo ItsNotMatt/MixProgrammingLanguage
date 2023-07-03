@@ -23,7 +23,7 @@ pub fn assign_var(parser: &mut Parser) {
             let token = parser.next_token().unwrap();
             match token {//should be = after var
                 Token::Equal => {
-                    let expr = get_expr(parser);
+                    let expr = parser.get_expr();
                     create_var(parser, s, expr);
                 }
                 _ => {
@@ -56,7 +56,7 @@ fn reassign_var(parser: &mut Parser, hash: u64, expr: Expr) {
 }
 
 fn change_val_by_expr(parser: &mut Parser, hash: u64, operator: Operator) {
-    let expr = get_expr(parser);
+    let expr = parser.get_expr();
     let var = parser.cache.get_var_from_hash(hash);
     let var_expr = var.to_expression();
     let bin_expr = Expr::BinExpr(BinExpr {
@@ -84,7 +84,7 @@ pub fn edit_var(parser: &mut Parser, hash: u64) {
             }
         }
         Token::Equal => {
-            let expr = get_expr(parser);
+            let expr = parser.get_expr();
             reassign_var(parser, hash, expr);
         }
         _ => {
@@ -93,21 +93,6 @@ pub fn edit_var(parser: &mut Parser, hash: u64) {
     }
 }
 
-fn get_expr(parser: &mut Parser) -> Expr {
-    if parser.tokens[1] != Token::Semi {
-        let expr = parser.parse_bin_expr(None);
-        return expr;
-    }
-    else {
-        match parser.next_token().unwrap() {
-            Token::Number(n) => return Expr::Number(n),
-            Token::Identifier(s) => {
-                let var = parser.cache.get_var_from_string(&s);
-                return var.to_expression();
-            }
-            _ => panic!("Couldnt properly parse token for var"),
-        }
-    }
-}
+
 
 

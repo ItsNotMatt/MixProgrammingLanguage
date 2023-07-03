@@ -5,10 +5,12 @@ use crate::{lexer::Token, ast::{Expr, BinExpr, Operator, Key, Identifier}, error
 
 mod variable;
 mod function;
+mod keyword;
 
 pub struct Parser {
     tokens: Vec<Token>,
     expression: Option<Expr>,
+    statements: Vec<Expr>,
     cache: Cache,
 }
 
@@ -17,6 +19,7 @@ impl Parser {
         Self {
             tokens,
             expression: None,
+            statements: Vec::new(),
             cache,
         }
     }
@@ -62,27 +65,23 @@ impl Parser {
     fn parse_bin_expr(&mut self, expr: Option<Expr>) -> Expr {
         
         let mut bin_expr = Expr::BinExpr(BinExpr {
-            left: dbg!(Box::new(expr.unwrap_or_else(|| self.parse_expr().unwrap()))),
+            left: Box::new(expr.unwrap_or_else(|| self.parse_expr().unwrap())),
             op: {
                 match self.parse_expr().unwrap() {
                     Expr::Operator(op) => op,
                     _ => panic!("Expected operator"),
                 }
             },
-            right: dbg!(Box::new(self.parse_expr().unwrap())),
+            right: Box::new(self.parse_expr().unwrap()),
         });
 
         bin_expr = eval_bin_expr(bin_expr);
         self.expression = Some(bin_expr.clone());
         let token = &self.tokens[0]; 
-        println!("next tok: {:?}", token);
         if token != &Token::CParen && token != &Token::Semi {
             println!("continuing to create next bin expr");
             self.parse_bin_expr(Some(bin_expr.clone()));
         } 
-        else {
-            println!("Finished binexpr: {}", bin_expr);
-        }
         return bin_expr; //for cases when I want a return value 
     }
 
@@ -115,12 +114,32 @@ impl Parser {
         }
     }
 
+    fn get_expr(&mut self) -> Expr { //used when you want to check if expr ends or create a new exp
+        if self.tokens[1] != Token::Semi {
+            let expr = self.parse_bin_expr(None);
+            return expr;
+        }
+        else {
+            match self.next_token().unwrap() {
+                Token::Number(n) => return Expr::Number(n),
+                Token::Identifier(s) => {
+                    let var = self.cache.get_var_from_string(&s);
+                    return var.to_expression();
+                }
+                _ => panic!("Couldnt properly parse token for var"),
+            }
+        }
+    }
+
     fn parse_keyword(&mut self, key: Key) {
         println!("Parsing key word: {:?}", key);
         
         match key {
             Key::Let => {
                 variable::assign_var(self);
+            }
+            Key::If => {
+                keyword::parse_if(self);
             }
             _ => {
                 panic!("Unsupported key word");
