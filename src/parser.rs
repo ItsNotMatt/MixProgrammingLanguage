@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 #![allow(unused_imports)]
-use crate::{lexer::Token, ast::{Expr, BinExpr, Operator, Key}, error::ParseError, evaluator::eval_bin_expr, runtime::cache::Cache};
+
+use crate::{lexer::Token, ast::{Expr, BinExpr, Operator, Key, Identifier}, error::ParseError, evaluator::eval_bin_expr, runtime::cache::Cache};
 
 mod variable;
 
@@ -30,6 +31,22 @@ impl Parser {
         while let Some(token) = self.next_token() {
             println!("Parsing Token: {:?}", token);
             match token {
+                Token::Identifier(s) => {
+                    match self.parse_identifier(s) {
+                        Identifier::Variable(hash) => {
+                            let var = self.cache.get_var_from_hash(hash);
+                            println!("Found variable {:?}", var);
+                        }
+                        Identifier::Fn(hash) => {
+                            let func = self.cache.get_fn_from_hash(hash);
+                            println!("Found fn");
+                        }
+                        Identifier::NativeFn(hash) => {
+                            let func = self.cache.get_native_fn_from_hash(hash);
+                            println!("Found native fn");
+                        }
+                    }
+                }
                 Token::Keyword(k) => {
                     self.parse_keyword(k);
                 }
@@ -37,7 +54,8 @@ impl Parser {
                     self.parse_bin_expr(Some(Expr::Number(n)));
                 }
                 Token::Semi => {
-                    continue;
+                    self.expression = None;
+                    //creates statement and ends last expression
                 }
                 Token::CParen => {
                     continue;
@@ -121,6 +139,22 @@ impl Parser {
             }
         }
     }
+
+    fn parse_identifier(&mut self, identifier: String) -> Identifier {
+        if let Some(hash) = self.cache.get_var_hash(&identifier) {
+            return Identifier::Variable(hash);
+        }
+        else if let Some(hash) = self.cache.get_fn_hash(&identifier) {
+            return Identifier::Fn(hash);
+        }
+        else if let Some(hash) = self.cache.get_native_fn_hash(&identifier) {
+            return Identifier::NativeFn(hash);
+        }
+        else {
+            panic!("Cant find identifier in this context.");
+        }
+    }
+
 
 }
 

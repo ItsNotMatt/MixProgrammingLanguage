@@ -1,5 +1,14 @@
 use std::fmt;
 
+
+
+
+pub enum Identifier {
+    Variable(u64),
+    Fn(u64),
+    NativeFn(u64),
+}
+
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
 pub enum Expr {
     Number(i32),

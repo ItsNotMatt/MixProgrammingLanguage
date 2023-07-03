@@ -10,5 +10,17 @@
     "title": "Native functions can be done with the AST or in this case injection",
     "additionalNotes": null,
     "completed": false
+  },
+  {
+    "id": 3,
+    "title": "gonna have to double index into hmap because of borrow checker issue, should be fixed soon with future rust update",
+    "additionalNotes": null,
+    "completed": false
+  },
+  {
+    "id": 4,
+    "title": "might change the identifier case in parse tokens to instead do all the logic in a seperate fn to keep parse tokens clean",
+    "additionalNotes": null,
+    "completed": false
   }
 ]
