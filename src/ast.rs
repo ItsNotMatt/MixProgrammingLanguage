@@ -15,6 +15,7 @@ pub enum Expr {
     Identifier(String), 
     Operator(Operator),
     BinExpr(BinExpr),
+    Bool(bool),
 }
 
 impl fmt::Display for Expr {
@@ -23,7 +24,8 @@ impl fmt::Display for Expr {
             Expr::Number(n) => write!(f, "{{{}}}", n),
             Expr::Identifier(s) => write!(f, "{{{:?}}}", s),
             Expr::Operator(o) => write!(f, "{{{}}}", o),
-            Expr::BinExpr(e) => write!(f, " [{} {} {}]", e.left, e.op, e.right) 
+            Expr::BinExpr(e) => write!(f, " [{} {} {}]", e.left, e.op, e.right), 
+            Expr::Bool(b) => write!(f, "{{{}}}", b),
         }
     }
 }

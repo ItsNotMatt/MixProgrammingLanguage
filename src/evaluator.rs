@@ -1,4 +1,4 @@
-use crate::ast::{Expr, Operator, ArithmeticOperator};
+use crate::ast::{Expr, Operator, ArithmeticOperator, ComparisonOperator};
 
 pub fn eval_bin_expr(expr: Expr) -> Expr  {
     if let Expr::BinExpr(exp) = expr {
@@ -7,8 +7,9 @@ pub fn eval_bin_expr(expr: Expr) -> Expr  {
                 let ex = arithmetic(&exp.left, &exp.right, op);
                 return ex;
             }
-            _ => {
-                panic!();
+            Operator::Comparison(op) => {
+                let ex = compare(&exp.left, &exp.right, op);
+                return ex;
             }
         }
     }
@@ -40,8 +41,41 @@ fn arithmetic(left: &Expr, right: &Expr, op: ArithmeticOperator) -> Expr {
     }
 }
 
-pub fn compare_expr(expr: Expr) -> bool {
-    todo!();
+pub fn compare(left: &Expr, right: &Expr, op: ComparisonOperator) -> Expr {
+    match (left, right) {
+        (Expr::Number(l), Expr::Number(r)) => {
+
+            match op {
+                ComparisonOperator::Greater => {
+                    if l > r {
+                        return Expr::Bool(true);
+                    }
+                }
+                ComparisonOperator::Less => {
+                    if l > r {
+                        return Expr::Bool(true);
+                    }
+                }
+                ComparisonOperator::DoubleEqual => {
+                    if l == r {
+                        return Expr::Bool(true);
+                    }
+                }
+                ComparisonOperator::LessEqual => {
+                    if l <= r {
+                        return Expr::Bool(true);
+                    }
+                }
+                ComparisonOperator::GreaterEqual => {
+                    if l >= r {
+                        return Expr::Bool(true);
+                    }
+                }
+            }
+        }
+        _ => panic!("Cant compare expression types"),
+    }
+    return Expr::Bool(false);
 }
 
 

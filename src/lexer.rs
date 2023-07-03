@@ -120,11 +120,28 @@ impl Lexer {
             self.position += 1;
 
             match self.ch {
+                '=' => {
+                    if self.check_ahead('=') {
+                        tokens.push(Token::Operator(Operator::Comparison(ComparisonOperator::DoubleEqual)));
+                    } 
+                    else {
+                        tokens.push(Token::Equal);
+                    }
+                }
+                ';' => {
+                    tokens.push(Token::Semi);
+                }
                 '(' => {
                     tokens.push(Token::OParen);
                 }
                 ')' => {
                     tokens.push(Token::CParen);
+                }
+                '{' => {
+                    tokens.push(Token::OCurly);
+                }
+                '}' => {
+                    tokens.push(Token::CCurly);
                 }
                 '+' => {
                     if self.check_ahead('=') {
@@ -158,22 +175,21 @@ impl Lexer {
                         tokens.push(Token::Operator(Operator::Arithmetic(ArithmeticOperator::Div)));
                     }
                 }
-                '=' => {
+                '>' => {
                     if self.check_ahead('=') {
-                        tokens.push(Token::Operator(Operator::Comparison(ComparisonOperator::DoubleEqual)));
+                        tokens.push(Token::Operator(Operator::Comparison(ComparisonOperator::GreaterEqual)));
                     } 
                     else {
-                        tokens.push(Token::Equal);
+                        tokens.push(Token::Operator(Operator::Comparison(ComparisonOperator::Greater)));
                     }
                 }
-                '{' => {
-                    tokens.push(Token::OCurly);
-                }
-                '}' => {
-                    tokens.push(Token::CCurly);
-                }
-                ';' => {
-                    tokens.push(Token::Semi);
+                '<' => {
+                    if self.check_ahead('=') {
+                        tokens.push(Token::Operator(Operator::Comparison(ComparisonOperator::LessEqual)));
+                    } 
+                    else {
+                        tokens.push(Token::Operator(Operator::Comparison(ComparisonOperator::Less)));
+                    }
                 }
                 _ => {
                     if self.ch.is_whitespace(){
