@@ -6,6 +6,7 @@ mod lexer;
 mod ast;
 mod parser;
 mod error;
+mod evaluator;
 
 fn main() {
     let dir = std::env::current_dir().unwrap();

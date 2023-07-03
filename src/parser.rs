@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 #![allow(unused_imports)]
-use crate::{lexer::Token, ast::{Expr, BinExpr, Operator}, error::ParseError};
+use crate::{lexer::Token, ast::{Expr, BinExpr, Operator}, error::ParseError, evaluator::eval_bin_expr};
 
 pub struct Parser {
     tokens: Vec<Token>,
@@ -33,6 +33,9 @@ impl Parser {
                 Token::Semi => {
                     continue;
                 }
+                Token::CParen => {
+                    continue;
+                }
                 Token::Eof => {
                     println!("End of file");
                     return;
@@ -46,7 +49,7 @@ impl Parser {
 
     fn parse_bin_expr(&mut self, expr: Option<Expr>) {
         
-        let bin_expr = Expr::BinExpr(BinExpr {
+        let mut bin_expr = Expr::BinExpr(BinExpr {
             left: dbg!(Box::new(expr.unwrap_or_else(|| self.parse_expr().unwrap()))),
             op: {
                 match self.parse_expr().unwrap() {
@@ -58,8 +61,7 @@ impl Parser {
         });
 
 
-        //eval expression then return it when eval is created
-        //bin_expr = eval_expr(bin_expr).unwrap();
+        bin_expr = eval_bin_expr(bin_expr);
         self.expression = Some(bin_expr.clone());
         let token = &self.tokens[0]; 
         println!("next tok: {:?}", token);
