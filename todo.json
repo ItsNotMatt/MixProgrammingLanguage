@@ -34,5 +34,17 @@
     "title": "Lexer: check ahead only returns true, not as verbose if you need to check ahead for multiple things. Can also just call check ahead twice",
     "additionalNotes": null,
     "completed": false
+  },
+  {
+    "id": 7,
+    "title": "Future: Add scope id to a variable based on where it was created",
+    "additionalNotes": null,
+    "completed": false
+  },
+  {
+    "id": 8,
+    "title": "Parser: Can simply making bin expr if I just return when I hit something not valid so I dont have to peek ahead",
+    "additionalNotes": null,
+    "completed": false
   }
 ]

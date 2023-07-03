@@ -51,6 +51,14 @@ impl Parser {
                 Token::CParen => {
                     continue;
                 }
+                Token::OCurly => {
+                    //will create new scope later
+                    continue;
+                }
+                Token::CCurly => {
+                    //will create new scope later
+                    continue;
+                }
                 Token::Eof => {
                     println!("End of file");
                     return;
@@ -77,8 +85,8 @@ impl Parser {
 
         bin_expr = eval_bin_expr(bin_expr);
         self.expression = Some(bin_expr.clone());
-        let token = &self.tokens[0]; 
-        if token != &Token::CParen && token != &Token::Semi {
+
+        if self.parse_next_expression() {
             println!("continuing to create next bin expr");
             self.parse_bin_expr(Some(bin_expr.clone()));
         } 
@@ -128,6 +136,16 @@ impl Parser {
                 }
                 _ => panic!("Couldnt properly parse token for var"),
             }
+        }
+    }
+
+    fn parse_next_expression(&mut self) -> bool {
+        let token = &self.tokens[0];
+        match token {
+            Token::Operator(_) => return true,
+            Token::Number(_) => return true,
+            Token::OParen => return true,
+            _ => return false,
         }
     }
 

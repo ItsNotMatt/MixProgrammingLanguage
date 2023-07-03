@@ -5,10 +5,12 @@ pub fn eval_bin_expr(expr: Expr) -> Expr  {
         match exp.op {
             Operator::Arithmetic(op) => {
                 let ex = arithmetic(&exp.left, &exp.right, op);
+                println!("Exp after eval: {}", ex);
                 return ex;
             }
             Operator::Comparison(op) => {
                 let ex = compare(&exp.left, &exp.right, op);
+                println!("Exp after eval: {}", ex);
                 return ex;
             }
         }
@@ -52,7 +54,7 @@ pub fn compare(left: &Expr, right: &Expr, op: ComparisonOperator) -> Expr {
                     }
                 }
                 ComparisonOperator::Less => {
-                    if l > r {
+                    if l < r {
                         return Expr::Bool(true);
                     }
                 }
