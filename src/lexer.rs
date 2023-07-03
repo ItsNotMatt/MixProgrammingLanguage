@@ -1,4 +1,4 @@
-use crate::ast::{Operator, Key, ArithmeticOperator};
+use crate::ast::{Operator, Key, ArithmeticOperator, ComparisonOperator};
 
 pub struct Lexer {
     position: usize,
@@ -102,6 +102,16 @@ impl Lexer {
         panic!();
     }
 
+    fn check_ahead(&mut self, check: char) -> bool {
+        if check == self.src[self.position] {
+            self.position += 1;
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     pub fn tokenize(&mut self) -> Vec<Token> {
         let mut tokens:Vec<Token> = Vec::new();
 
@@ -117,19 +127,44 @@ impl Lexer {
                     tokens.push(Token::CParen);
                 }
                 '+' => {
-                    tokens.push(Token::Operator(Operator::Arithmetic(ArithmeticOperator::Add)));
+                    if self.check_ahead('=') {
+                        tokens.push(Token::Operator(Operator::Arithmetic(ArithmeticOperator::AddEq)));
+                    } 
+                    else {
+                        tokens.push(Token::Operator(Operator::Arithmetic(ArithmeticOperator::Add)));
+                    }
                 }
                 '-' => {
-                    tokens.push(Token::Operator(Operator::Arithmetic(ArithmeticOperator::Sub)));
+                    if self.check_ahead('=') {
+                        tokens.push(Token::Operator(Operator::Arithmetic(ArithmeticOperator::SubEq)));
+                    } 
+                    else {
+                        tokens.push(Token::Operator(Operator::Arithmetic(ArithmeticOperator::Sub)));
+                    }
                 }
                 '*' => {
-                    tokens.push(Token::Operator(Operator::Arithmetic(ArithmeticOperator::Multi)));
+                    if self.check_ahead('=') {
+                        tokens.push(Token::Operator(Operator::Arithmetic(ArithmeticOperator::MultiEq)));
+                    } 
+                    else {
+                        tokens.push(Token::Operator(Operator::Arithmetic(ArithmeticOperator::Multi)));
+                    }
                 }
                 '/' => {
-                    tokens.push(Token::Operator(Operator::Arithmetic(ArithmeticOperator::Div)));
+                    if self.check_ahead('=') {
+                        tokens.push(Token::Operator(Operator::Arithmetic(ArithmeticOperator::DivEq)));
+                    } 
+                    else {
+                        tokens.push(Token::Operator(Operator::Arithmetic(ArithmeticOperator::Div)));
+                    }
                 }
                 '=' => {
-                    tokens.push(Token::Equal);
+                    if self.check_ahead('=') {
+                        tokens.push(Token::Operator(Operator::Comparison(ComparisonOperator::DoubleEqual)));
+                    } 
+                    else {
+                        tokens.push(Token::Equal);
+                    }
                 }
                 '{' => {
                     tokens.push(Token::OCurly);

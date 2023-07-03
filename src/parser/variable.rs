@@ -1,4 +1,4 @@
-use crate::{lexer::Token, ast::{Expr, ArithmeticOperator, Operator}, data_types::{Type, IntType, Variable}, parser::variable, runtime};
+use crate::{lexer::Token, ast::{Expr, ArithmeticOperator, Operator, BinExpr}, data_types::{Type, IntType, Variable}, parser::variable, runtime, evaluator::eval_bin_expr};
 
 use super::Parser;
 
@@ -55,6 +55,19 @@ fn reassign_var(parser: &mut Parser, hash: u64, expr: Expr) {
     }
 }
 
+fn change_val_by_expr(parser: &mut Parser, hash: u64, operator: Operator) {
+    let expr = get_expr(parser);
+    let var = parser.cache.get_var_from_hash(hash);
+    let var_expr = var.to_expression();
+    let bin_expr = Expr::BinExpr(BinExpr {
+        left: Box::new(var_expr),
+        op: operator,
+        right: Box::new(expr), 
+    });
+    let value = eval_bin_expr(bin_expr);
+    var.reassign_data_from_expr(value);
+}
+
 pub fn edit_var(parser: &mut Parser, hash: u64) {
     println!("Editing variable");
 
@@ -62,6 +75,10 @@ pub fn edit_var(parser: &mut Parser, hash: u64) {
         Token::Operator(op) => {
             match op {
                 Operator::Arithmetic(ArithmeticOperator::AddEq) => {
+                    change_val_by_expr(parser, hash, Operator::Arithmetic(ArithmeticOperator::Add));
+                }
+                Operator::Arithmetic(ArithmeticOperator::SubEq) => {
+                    change_val_by_expr(parser, hash, Operator::Arithmetic(ArithmeticOperator::Sub));
                 }
                 _ => panic!("Not valid token after var"),
             }

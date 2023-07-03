@@ -28,5 +28,11 @@
     "title": "For $vars put them into a vec and repeat the statement with the next index",
     "additionalNotes": null,
     "completed": false
+  },
+  {
+    "id": 6,
+    "title": "Lexer: check ahead only returns true, not as verbose if you need to check ahead for multiple things. Can also just call check ahead twice",
+    "additionalNotes": null,
+    "completed": false
   }
 ]

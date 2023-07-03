@@ -55,6 +55,19 @@ impl Variable {
             }
         }
     }
+
+    pub fn reassign_data_from_expr(&mut self, expr: Expr) {
+        println!("Reassigning data of {:?}, from expression {:?}", self.name, expr);
+        match &mut self.data_type {
+            Type::Int(i) => {
+                match expr {
+                    Expr::Number(n) => i.value = n,
+                    _ => panic!("Reassigning var from expr not supported"),
+                }
+            }
+            _ => panic!("Reassigning this var from expr of that type not supported"),
+        }
+    }
 }
 
 pub struct Function { 
