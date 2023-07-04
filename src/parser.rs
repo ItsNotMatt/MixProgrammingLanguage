@@ -9,6 +9,9 @@ mod keyword;
 
 pub struct Parser {
     tokens: Vec<Token>,
+    position: usize,
+    read_position: usize,
+    consume_tokens: bool,
     expression: Option<Expr>,
     statements: Vec<Expr>,
     nest: usize,
@@ -19,6 +22,9 @@ impl Parser {
     pub fn new(tokens: Vec<Token>, cache: Cache) -> Self {
         Self {
             tokens,
+            position: 0,
+            read_position: 0,
+            consume_tokens: true,
             expression: None,
             statements: Vec::new(),
             nest: 0,
@@ -28,7 +34,15 @@ impl Parser {
 
     fn next_token(&mut self) -> Option<Token> {
         if self.tokens.len() > 0 {
-            return Some(self.tokens.remove(0));
+            if self.consume_tokens {
+                return Some(self.tokens.remove(0));
+            }
+            else {
+                let token = self.tokens[self.position].clone();
+                self.position += 1;
+                println!("Inside while loop, copying token: {:?}", token);
+                return Some(token);
+            }
         }
         return None
     }
@@ -130,7 +144,15 @@ impl Parser {
     }
 
     fn get_expr(&mut self) -> Expr { //used when you want to check if expr ends or create a new exp
-        if self.tokens[1] != Token::Semi {
+        let mut pos = 0;
+        if self.consume_tokens {
+            pos = 1;
+        }//if consuming tokens then 1 is peeking ahead, if not consume then self.pos is 1 ahead
+        else {
+            pos = self.position + 1;
+        }
+        if self.tokens[pos] != Token::Semi {
+            println!("token is not semi, parsing binary. token: {:?}", self.tokens[pos]);
             let expr = self.parse_bin_expr(None);
             return expr;
         }
@@ -165,6 +187,9 @@ impl Parser {
             }
             Key::If => {
                 keyword::parse_if(self);
+            }
+            Key::While => {
+                keyword::parse_while(self);
             }
             _ => {
                 panic!("Unsupported key word");

@@ -7,7 +7,7 @@ pub struct Lexer {
     src: Vec<char>,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum Token {
     Number(i32),
     Identifier(String),

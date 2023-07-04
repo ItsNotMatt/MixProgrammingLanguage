@@ -1,55 +1,55 @@
 [
   {
     "id": 1,
-    "title": "Parser: maybe remove after we peek forward one so we dont double check?",
+    "title": "Native functions can be done with the AST or in this case injection",
     "additionalNotes": null,
-    "completed": false
+    "completed": true
   },
   {
     "id": 2,
-    "title": "Native functions can be done with the AST or in this case injection",
-    "additionalNotes": null,
-    "completed": false
-  },
-  {
-    "id": 3,
     "title": "gonna have to double index into hmap because of borrow checker issue, should be fixed soon with future rust update",
     "additionalNotes": null,
     "completed": false
   },
   {
-    "id": 4,
-    "title": "might change the identifier case in parse tokens to instead do all the logic in a seperate fn to keep parse tokens clean",
-    "additionalNotes": null,
-    "completed": false
-  },
-  {
-    "id": 5,
+    "id": 3,
     "title": "For $vars put them into a vec and repeat the statement with the next index",
     "additionalNotes": null,
     "completed": false
   },
   {
-    "id": 6,
+    "id": 4,
     "title": "Lexer: check ahead only returns true, not as verbose if you need to check ahead for multiple things. Can also just call check ahead twice",
     "additionalNotes": null,
     "completed": false
   },
   {
-    "id": 7,
+    "id": 5,
     "title": "Future: Add scope id to a variable based on where it was created",
     "additionalNotes": null,
     "completed": false
   },
   {
+    "id": 6,
+    "title": "for scope can create new scope when needed and assign it an id and a parent scope",
+    "additionalNotes": null,
+    "completed": false
+  },
+  {
+    "id": 7,
+    "title": "Todo: while, if comparison static dont recheck every loop. if hit } and nest = startnest then restart while and check comparison again. break keyword to end loop at point.",
+    "additionalNotes": null,
+    "completed": false
+  },
+  {
     "id": 8,
-    "title": "Parser: Can simply making bin expr if I just return when I hit something not valid so I dont have to peek ahead",
+    "title": "need to not consume tokens while in while loop, just copy",
     "additionalNotes": null,
     "completed": false
   },
   {
     "id": 9,
-    "title": "for scope can create new scope when needed and assign it an id and a parent scope",
+    "title": "self.position will be 1 ahead always",
     "additionalNotes": null,
     "completed": false
   }
