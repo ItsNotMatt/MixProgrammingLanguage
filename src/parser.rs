@@ -129,6 +129,7 @@ impl Parser {
                     _ => panic!("Cant return expression from this keyword"),
                 }
             }
+            Token::String(s) => return Ok(Expr::String(s)),
             Token::Identifier(s) => {
                 let var = self.cache.get_var_from_string(&s);
                 let expr = var.to_expression();

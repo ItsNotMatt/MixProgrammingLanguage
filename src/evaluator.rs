@@ -69,6 +69,13 @@ pub fn compare(left: &Expr, right: &Expr, op: ComparisonOperator) -> Expr {
                 _ => panic!("Cant compare bools with this operand"),
             }
         }
+        (Expr::String(l), Expr::String(r)) => {
+            match op {
+                ComparisonOperator::DoubleEqual => return Expr::Bool(l == r),
+                ComparisonOperator::NotEqual => return Expr::Bool(l != r),
+                _ => panic!("Cant compare bools with this operand"),
+            }
+        }
         _ => panic!("Cant compare expression types"),
     }
 }

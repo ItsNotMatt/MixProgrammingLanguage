@@ -1,11 +1,2 @@
-let y = 1 + 2;
-let x = false;
+print("hello", 10);
 
-while x != false {
-    if y < 10 {
-        y += 1;
-    }
-    if y > 9 {
-        x = true;
-    }
-}

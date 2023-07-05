@@ -22,6 +22,7 @@ pub enum Token {
     CBracket,
     OCurly,
     CCurly,
+    Comma,
     Semi,
     Eof,
 }
@@ -155,6 +156,9 @@ impl Lexer {
                 }
                 ';' => {
                     tokens.push(Token::Semi);
+                }
+                ',' => {
+                    tokens.push(Token::Comma);
                 }
                 '(' => {
                     tokens.push(Token::OParen);
