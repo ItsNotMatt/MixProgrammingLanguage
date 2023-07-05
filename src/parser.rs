@@ -181,7 +181,7 @@ impl Parser {
     }
 
     fn parse_keyword(&mut self, key: Key) {
-        println!("Parsing key word: {:?}", key);
+        println!("\n---Parsing key word: {:?}", key);
         
         match key {
             Key::Let => {

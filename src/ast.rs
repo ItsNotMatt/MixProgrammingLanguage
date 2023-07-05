@@ -95,8 +95,9 @@ impl fmt::Display for ArithmeticOperator {
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
 pub enum ComparisonOperator {
     Less,
-    DoubleEqual,
     Greater,
     LessEqual,
-    GreaterEqual
+    GreaterEqual,
+    DoubleEqual,
+    NotEqual,
 }

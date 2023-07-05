@@ -53,38 +53,24 @@ fn arithmetic(left: &Expr, right: &Expr, op: ArithmeticOperator) -> Expr {
 pub fn compare(left: &Expr, right: &Expr, op: ComparisonOperator) -> Expr {
     match (left, right) {
         (Expr::Number(l), Expr::Number(r)) => {
-
             match op {
-                ComparisonOperator::Greater => {
-                    if l > r {
-                        return Expr::Bool(true);
-                    }
-                }
-                ComparisonOperator::Less => {
-                    if l < r {
-                        return Expr::Bool(true);
-                    }
-                }
-                ComparisonOperator::DoubleEqual => {
-                    if l == r {
-                        return Expr::Bool(true);
-                    }
-                }
-                ComparisonOperator::LessEqual => {
-                    if l <= r {
-                        return Expr::Bool(true);
-                    }
-                }
-                ComparisonOperator::GreaterEqual => {
-                    if l >= r {
-                        return Expr::Bool(true);
-                    }
-                }
+                ComparisonOperator::Greater => return Expr::Bool(l > r),
+                ComparisonOperator::Less => return Expr::Bool(l < r),
+                ComparisonOperator::LessEqual => return Expr::Bool(l <= r),
+                ComparisonOperator::GreaterEqual => return Expr::Bool(l >= r),
+                ComparisonOperator::DoubleEqual => return Expr::Bool(l == r), 
+                ComparisonOperator::NotEqual => return Expr::Bool(l != r), 
+            }
+        }
+        (Expr::Bool(l), Expr::Bool(r)) => {
+            match op {
+                ComparisonOperator::DoubleEqual => return Expr::Bool(l == r),
+                ComparisonOperator::NotEqual => return Expr::Bool(l != r),
+                _ => panic!("Cant compare bools with this operand"),
             }
         }
         _ => panic!("Cant compare expression types"),
     }
-    return Expr::Bool(false);
 }
 
 

@@ -97,25 +97,7 @@
   },
   {
     "id": 17,
-    "title": "maybe just use get expr in parse_bin_expr instead of manual check?",
-    "additionalNotes": null,
-    "completed": false
-  },
-  {
-    "id": 18,
-    "title": "its not parsing the if correctly as an if keyword, not the expression itself as the issue",
-    "additionalNotes": null,
-    "completed": false
-  },
-  {
-    "id": 19,
-    "title": "change the check in parse_bin to just get_expr?",
-    "additionalNotes": null,
-    "completed": false
-  },
-  {
-    "id": 20,
-    "title": "issue is because of get expr. we are changing it to work with either while/if or with assignment/editing vars, not both",
+    "title": "while loops wont work as long as we start position at 0 instead of while position for double looping",
     "additionalNotes": null,
     "completed": false
   }

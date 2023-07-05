@@ -14,6 +14,7 @@ pub enum Token {
     Identifier(String),
     Operator(Operator),
     Equal,
+    Bang,
     Keyword(Key),
     OParen,
     CParen,
@@ -169,6 +170,14 @@ impl Lexer {
                 }
                 '"' => { 
                     tokens.push(self.read_string());
+                }
+                '!' => {
+                    if self.check_ahead('=') {
+                        tokens.push(Token::Operator(Operator::Comparison(ComparisonOperator::NotEqual)));
+                    } 
+                    else {
+                        tokens.push(Token::Bang);
+                    }
                 }
                 '+' => {
                     if self.check_ahead('=') {

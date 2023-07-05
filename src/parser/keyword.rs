@@ -25,7 +25,7 @@ fn skip_block(parser: &mut Parser) {
     let mut nest = 0;
     let mut count = 0; //to count read position so the tokens of expr before { are skipped
     while let Some(token) = parser.next_token() {
-        println!("Read position: {}, Count: {}", parser.read_position, count);
+        //println!("Read position: {}, Count: {}", parser.read_position, count);
         
         if count < parser.read_position {
             count += 1;
