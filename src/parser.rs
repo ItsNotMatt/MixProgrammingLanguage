@@ -119,17 +119,20 @@ impl Parser {
         println!("Matching on {:?}", token);
 
         match token {
-            Token::Number(n) => {
-                return Ok(Expr::Number(n))
+            Token::Number(n) => return Ok(Expr::Number(n)),
+            Token::Keyword(k) => {
+                match k {
+                    Key::True => return Ok(Expr::Bool(true)),
+                    Key::False => return Ok(Expr::Bool(false)),
+                    _ => panic!("Cant return expression from this keyword"),
+                }
             }
             Token::Identifier(s) => {
                 let var = self.cache.get_var_from_string(&s);
                 let expr = var.to_expression();
                 return Ok(expr);
             }
-            Token::Operator(op) => {
-                return Ok(Expr::Operator(op))
-            }
+            Token::Operator(op) => return Ok(Expr::Operator(op)),
             Token::OParen => {
                 self.parse_bin_expr(None);
                 return Ok(self.expression.clone().unwrap());
@@ -159,6 +162,14 @@ impl Parser {
         else {
             match self.next_token().unwrap() {
                 Token::Number(n) => return Expr::Number(n),
+                Token::Keyword(k) => {
+                    match k {
+                        Key::True => return Expr::Bool(true),
+                        Key::False => return Expr::Bool(false),
+                        _ => panic!("Cant assign var to this keyword"),
+                    }
+                }
+                Token::String(s) => return Expr::String(s),
                 Token::Identifier(s) => {
                     let var = self.cache.get_var_from_string(&s);
                     return var.to_expression();

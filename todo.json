@@ -52,5 +52,41 @@
     "title": "self.position will be 1 ahead always",
     "additionalNotes": null,
     "completed": false
+  },
+  {
+    "id": 10,
+    "title": "Nested loops",
+    "additionalNotes": null,
+    "completed": false
+  },
+  {
+    "id": 11,
+    "title": "Configure with string and bool variable types",
+    "additionalNotes": null,
+    "completed": false
+  },
+  {
+    "id": 12,
+    "title": "Native functions",
+    "additionalNotes": null,
+    "completed": false
+  },
+  {
+    "id": 13,
+    "title": "Custom functions",
+    "additionalNotes": null,
+    "completed": false
+  },
+  {
+    "id": 14,
+    "title": "Variable scope",
+    "additionalNotes": null,
+    "completed": false
+  },
+  {
+    "id": 15,
+    "title": "middle of adding different support for bool and string types",
+    "additionalNotes": null,
+    "completed": false
   }
 ]

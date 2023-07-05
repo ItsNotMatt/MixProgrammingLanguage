@@ -7,7 +7,7 @@ use crate::ast::Expr;
 pub enum Type {
     Int(IntType),
     String(StringType),
-    Bool(BoolType),
+    Bool(bool),
     Struct,
     Enum,
 }
@@ -20,11 +20,6 @@ pub struct IntType {
 #[derive(Debug, PartialEq, Clone, PartialOrd)]
 pub struct StringType {
     pub value: String,
-}
-
-#[derive(Debug, PartialEq, Clone, PartialOrd)]
-pub struct BoolType {
-    pub value: bool,
 }
 
 #[derive(Debug, PartialEq, Clone, PartialOrd)]
@@ -49,6 +44,9 @@ impl Variable {
         match &self.data_type {
             Type::Int(i) => {
                 return Expr::Number(i.value);
+            }
+            Type::String(s) => {
+                return Expr::String(s.value.clone());
             }
             _ => {
                 panic!("Cant convert type to expression");

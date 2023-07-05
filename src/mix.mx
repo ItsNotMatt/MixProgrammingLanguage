@@ -1,7 +1,4 @@
-let x = 1;
-let y = 2;
-
-while x < 12 {
-    x += y;
-}
+let x = "hello how are you?";
+let y = "test";
+let z = x + y;
 

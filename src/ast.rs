@@ -12,16 +12,18 @@ pub enum Identifier {
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
 pub enum Expr {
     Number(i32),
+    Bool(bool),
+    String(String),
     Identifier(String), 
     Operator(Operator),
     BinExpr(BinExpr),
-    Bool(bool),
 }
 
 impl fmt::Display for Expr {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Expr::Number(n) => write!(f, "{{{}}}", n),
+            Expr::String(s) => write!(f, "{{{}}}", s),
             Expr::Identifier(s) => write!(f, "{{{:?}}}", s),
             Expr::Operator(o) => write!(f, "{{{}}}", o),
             Expr::BinExpr(e) => write!(f, " [{} {} {}]", e.left, e.op, e.right), 

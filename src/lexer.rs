@@ -10,6 +10,7 @@ pub struct Lexer {
 #[derive(Debug, PartialEq, Clone)]
 pub enum Token {
     Number(i32),
+    String(String),
     Identifier(String),
     Operator(Operator),
     Equal,
@@ -50,6 +51,12 @@ impl Lexer {
             }
             "while" => {
                 return Some(Token::Keyword(Key::While));
+            }
+            "true" => {
+                return Some(Token::Keyword(Key::True));
+            }           
+            "false" => {
+                return Some(Token::Keyword(Key::False));
             }
             _ => {
                 return None;
@@ -102,6 +109,23 @@ impl Lexer {
         panic!();
     }
 
+    fn read_string(&mut self) -> Token {
+        self.read_position = self.position;
+        while self.position < self.src.len() {
+            self.ch = self.src[self.position];
+            println!("reading string ch: {}", self.ch);
+            if self.ch == '"' {
+                println!("ch is quote");
+                let slice = self.src[self.read_position..self.position].to_vec();
+                let string: String = slice.iter().collect();
+                self.position += 1;
+                return Token::String(string);
+            }
+            self.position += 1;
+        }
+        panic!();
+    }
+
     fn check_ahead(&mut self, check: char) -> bool {
         if check == self.src[self.position] {
             self.position += 1;
@@ -142,6 +166,9 @@ impl Lexer {
                 }
                 '}' => {
                     tokens.push(Token::CCurly);
+                }
+                '"' => { 
+                    tokens.push(self.read_string());
                 }
                 '+' => {
                     if self.check_ahead('=') {

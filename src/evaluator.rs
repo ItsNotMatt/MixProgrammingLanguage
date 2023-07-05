@@ -32,9 +32,16 @@ fn arithmetic(left: &Expr, right: &Expr, op: ArithmeticOperator) -> Expr {
                     let res = l - r;
                     return Expr::Number(res);
                 }
-                _ => {
-                    panic!("Operation not supported");
+                _ => panic!("Operation not supported"),
+            }
+        }
+        (Expr::String(l), Expr::String(r)) => {
+            match op {
+                ArithmeticOperator::Add => {
+                    let combined = format!("{}{}", l, r);
+                    return Expr::String(combined);
                 }
+                _ => panic!("Operation not supported"),
             }
         }
         _ => {

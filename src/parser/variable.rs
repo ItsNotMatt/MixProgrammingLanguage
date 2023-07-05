@@ -1,4 +1,4 @@
-use crate::{lexer::Token, ast::{Expr, ArithmeticOperator, Operator, BinExpr}, data_types::{Type, IntType, Variable}, parser::variable, runtime, evaluator::eval_bin_expr};
+use crate::{lexer::Token, ast::{Expr, ArithmeticOperator, Operator, BinExpr}, data_types::{Type, IntType, Variable, StringType}, parser::variable, runtime, evaluator::eval_bin_expr};
 
 use super::Parser;
 
@@ -7,8 +7,14 @@ fn create_var(parser: &mut Parser, identifier: String, expr: Expr) {
             Expr::Number(n) => {
                 Type::Int(IntType { value: n })
             }
+            Expr::String(s) => {
+                Type::String(StringType { value: s })
+            }
+            Expr::Bool(b) => {
+                Type::Bool(b)
+            }
             _ => {
-                panic!("Unable to create var");
+                panic!("Unable to create var of this type");
             }
         };
         let var = Variable::new(identifier, data_type); 
