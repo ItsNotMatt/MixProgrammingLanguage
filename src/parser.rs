@@ -107,7 +107,7 @@ impl Parser {
         bin_expr = eval_bin_expr(bin_expr);
         self.expression = Some(bin_expr.clone());
 
-        if self.parse_next_expression() {
+        if self.parse_next_expression(0) {
             println!("continuing to create next bin expr");
             self.parse_bin_expr(Some(bin_expr.clone()));
         } 
@@ -154,7 +154,7 @@ impl Parser {
         else {
             pos = self.position + 1;
         }
-        if self.tokens[pos] != Token::Semi {
+        if self.parse_next_expression(pos) {
             println!("token is not semi, parsing binary. token: {:?}", self.tokens[pos]);
             let expr = self.parse_bin_expr(None);
             return expr;
@@ -179,11 +179,13 @@ impl Parser {
         }
     }
 
-    fn parse_next_expression(&mut self) -> bool {
-        let token = &self.tokens[0];
+    fn parse_next_expression(&mut self, position: usize) -> bool {
+        let token = &self.tokens[position];
         match token {
             Token::Operator(_) => return true,
             Token::Number(_) => return true,
+            Token::String(_) => return true,
+            Token::Identifier(_) => return true,
             Token::OParen => return true,
             _ => return false,
         }

@@ -88,5 +88,17 @@
     "title": "middle of adding different support for bool and string types",
     "additionalNotes": null,
     "completed": false
+  },
+  {
+    "id": 16,
+    "title": "Optimize: cloning to turn var into expression for string types",
+    "additionalNotes": null,
+    "completed": false
+  },
+  {
+    "id": 17,
+    "title": "maybe just use get expr in parse_bin_expr instead of manual check?",
+    "additionalNotes": null,
+    "completed": false
   }
 ]

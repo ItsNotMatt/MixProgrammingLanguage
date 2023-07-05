@@ -52,10 +52,17 @@ fn reassign_var(parser: &mut Parser, hash: u64, expr: Expr) {
                      i.value = n;
                      println!("Reassigning {}, to {} ", var.name, i.value);
                  }
-                 _ => {
-                    panic!("Unsupported reassignment to var, cant reassign var to this type");
-                 }
+                 _ => panic!("Unsupported reassignment to var, cant reassign var to this type"),
              }
+        }
+        Type::Bool(b) => {
+            match expr {
+                Expr::Bool(bo) => {
+                    *b = bo;
+                    println!("Reassigning {}, to {} ", var.name, b);
+                }
+                _ => panic!("Unsupported reassignment to var, cant reassign var to this type"),
+            }
         }
         _ => panic!("Unsupported reassignment to var, cant reassign var to this type"),
     }

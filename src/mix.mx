@@ -1,4 +1,6 @@
-let x = "hello how are you?";
-let y = "test";
-let z = x + y;
+let x = true;
 
+if x {
+    x = false;
+    let y = 10;
+}
