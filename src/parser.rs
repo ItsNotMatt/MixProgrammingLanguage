@@ -35,12 +35,13 @@ impl Parser {
     fn next_token(&mut self) -> Option<Token> {
         if self.tokens.len() > 0 {
             if self.consume_tokens {
+                println!("--Consuming Token: {:?}", self.tokens[0].clone());
                 return Some(self.tokens.remove(0));
             }
             else {
                 let token = self.tokens[self.position].clone();
                 self.position += 1;
-                println!("Inside while loop, copying token: {:?}", token);
+                println!("--Copying token: {:?}, position: {}", token, self.position);
                 return Some(token);
             }
         }
@@ -82,7 +83,7 @@ impl Parser {
                 }
             }
             if let Some(n) = nest_start {
-                println!("Curr nest {}, start: {}", self.nest, n);
+                println!("   Curr nest {}, start: {}", self.nest, n);
                 if self.nest == n {
                     println!("breaking from current loop");
                     break;
@@ -92,6 +93,7 @@ impl Parser {
     }
 
     fn parse_bin_expr(&mut self, expr: Option<Expr>) -> Expr {
+        println!("Making bin expr");
         
         let mut bin_expr = Expr::BinExpr(BinExpr {
             left: Box::new(expr.unwrap_or_else(|| self.parse_expr().unwrap())),
@@ -107,7 +109,7 @@ impl Parser {
         bin_expr = eval_bin_expr(bin_expr);
         self.expression = Some(bin_expr.clone());
 
-        if self.parse_next_expression(0) {
+        if self.parse_next_expression() {
             println!("continuing to create next bin expr");
             self.parse_bin_expr(Some(bin_expr.clone()));
         } 
@@ -116,7 +118,7 @@ impl Parser {
 
     fn parse_expr(&mut self) -> Result<Expr, ParseError> {
         let token = self.next_token().unwrap();
-        println!("Matching on {:?}", token);
+        println!("Matching on {:?}, Position: {}", token, self.position);
 
         match token {
             Token::Number(n) => return Ok(Expr::Number(n)),
@@ -147,40 +149,27 @@ impl Parser {
     }
 
     fn get_expr(&mut self) -> Expr { //used when you want to check if expr ends or create a new exp
-        let mut pos = 0;
-        if self.consume_tokens {
-            pos = 1;
-        }//if consuming tokens then 1 is peeking ahead, if not consume then self.pos is 1 ahead
-        else {
-            pos = self.position + 1;
-        }
-        if self.parse_next_expression(pos) {
-            println!("token is not semi, parsing binary. token: {:?}", self.tokens[pos]);
-            let expr = self.parse_bin_expr(None);
+        let exp = self.parse_expr().unwrap();
+        
+        if self.parse_next_expression() {
+            let expr = self.parse_bin_expr(Some(exp));
             return expr;
         }
         else {
-            match self.next_token().unwrap() {
-                Token::Number(n) => return Expr::Number(n),
-                Token::Keyword(k) => {
-                    match k {
-                        Key::True => return Expr::Bool(true),
-                        Key::False => return Expr::Bool(false),
-                        _ => panic!("Cant assign var to this keyword"),
-                    }
-                }
-                Token::String(s) => return Expr::String(s),
-                Token::Identifier(s) => {
-                    let var = self.cache.get_var_from_string(&s);
-                    return var.to_expression();
-                }
-                _ => panic!("Couldnt properly parse token for var"),
-            }
-        }
+            return exp;
+       }
     }
 
-    fn parse_next_expression(&mut self, position: usize) -> bool {
-        let token = &self.tokens[position];
+    fn parse_next_expression(&mut self) -> bool {
+        let mut pos = 0;
+        if self.consume_tokens {
+            pos = 0;
+        }//if consuming tokens then 1 is peeking ahead, if not consume then self.pos is 1 ahead
+        else {
+            pos = self.position;
+        }
+        let token = &self.tokens[pos];
+        println!("Check token ahead: {:?}, pos: {}", token, pos);
         match token {
             Token::Operator(_) => return true,
             Token::Number(_) => return true,
@@ -202,7 +191,7 @@ impl Parser {
                 keyword::parse_if(self);
             }
             Key::While => {
-                keyword::parse_while(self);
+                keyword::parse_while(self, None);
             }
             _ => {
                 panic!("Unsupported key word");

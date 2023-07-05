@@ -1,6 +1,8 @@
+let y = 1 + 2;
 let x = true;
 
-if x {
-    x = false;
-    let y = 10;
+x = false;
+
+while y < 3 {
+    y += 1;
 }
