@@ -1,4 +1,4 @@
-use std::{collections::{HashMap, hash_map::DefaultHasher}, hash::{Hash, Hasher}, result};
+use std::{collections::{HashMap, hash_map::DefaultHasher}, hash::{Hash, Hasher}, result, any::Any};
 
 use crate::data_types::{Variable, Function};
 
@@ -54,7 +54,7 @@ impl Cache {
 
 
     pub fn add_fn(&mut self, func: Function) {
-        println!("Adding func, type: {}", func.native);
+        println!("Adding func, native: {}", func.func.is_some());
         self.functions.insert(func.hash, func);
     }
 

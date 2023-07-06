@@ -1,3 +1,5 @@
+use std::any::Any;
+
 use crate::{lexer::Token, data_types::Function, ast::Expr};
 
 use super::Parser;
@@ -20,18 +22,15 @@ pub fn parse_function(parser: &mut Parser, hash: u64) {
         _ => panic!("Token after function isnt valid"),
     }
 
-    println!("\n--Args passed into function--");
-    for arg in &args {
-        println!("{}", arg);
-    }
     call_native(parser, hash, args);
 }
 
 fn call_native(parser: &mut Parser, hash: u64, args: Vec<Expr>) {
     let func = parser.cache.get_fn_from_hash(hash);
-
-    (func.func)();
+    let args: Box<dyn Any> = Box::new(args);
+    if let Some(f) = func.func.as_ref() {
+        (f)(args);
+    }
 }
-
 
 

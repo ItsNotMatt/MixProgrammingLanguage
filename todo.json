@@ -100,5 +100,11 @@
     "title": "while loops wont work as long as we start position at 0 instead of while position for double looping",
     "additionalNotes": null,
     "completed": false
+  },
+  {
+    "id": 18,
+    "title": "could make a public cache of the current arguments passes and then use whatever native function and access it",
+    "additionalNotes": null,
+    "completed": false
   }
 ]

@@ -1,3 +1,4 @@
+use std::any::Any;
 use std::{collections::hash_map::DefaultHasher, hash::Hasher};
 use std::hash::Hash;
 
@@ -74,19 +75,18 @@ impl Variable {
 pub struct Function { 
     pub name: String,
     pub hash: u64,
-    pub func: Box<dyn Fn()>,
-    pub native: bool,
+    pub func: Option<Box<dyn Fn(Box<dyn Any>)>>,
+    //later a list of tokens that will occur if func none aka non native
 }
 
 impl Function {
-    pub fn new(identifier: String, func: Box<dyn Fn()>, native: bool) -> Self {
+    pub fn new(identifier: String, func: Option<Box<dyn Fn(Box<dyn Any>)>>) -> Self {
         let mut s = DefaultHasher::new();
         identifier.hash(&mut s);
         Self {
             name: identifier,
             hash: s.finish(),
             func,
-            native,
         }
     }
 }
