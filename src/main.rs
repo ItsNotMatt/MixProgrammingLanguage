@@ -35,7 +35,7 @@ fn main() {
 
     //create cache and import io into cache
     let mut cache = runtime::cache::Cache::new();
-    core::import_io(&mut cache);
+    core::import_default_functions(&mut cache);
 
     //create parser and give values to cache from parser
     let mut parser = parser::Parser::new(tokens, cache);

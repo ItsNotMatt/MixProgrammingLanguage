@@ -22,10 +22,10 @@ pub enum Expr {
 impl fmt::Display for Expr {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Expr::Number(n) => write!(f, "{{{}}}", n),
-            Expr::String(s) => write!(f, "{{{}}}", s),
+            Expr::Number(n) => write!(f, "{}", n),
+            Expr::String(s) => write!(f, "{}", s),
             Expr::Identifier(s) => write!(f, "{{{:?}}}", s),
-            Expr::Operator(o) => write!(f, "{{{}}}", o),
+            Expr::Operator(o) => write!(f, "{}", o),
             Expr::BinExpr(e) => write!(f, " [{} {} {}]", e.left, e.op, e.right), 
             Expr::Bool(b) => write!(f, "{{{}}}", b),
         }

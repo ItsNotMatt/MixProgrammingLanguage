@@ -22,22 +22,28 @@ pub fn parse_if(parser: &mut Parser) {
 }
 
 fn skip_block(parser: &mut Parser) {
-    let mut nest = 0;
-    let mut count = 0; //to count read position so the tokens of expr before { are skipped
+    let mut nest: Option<usize> = None;
     while let Some(token) = parser.next_token() {
-        //println!("Read position: {}, Count: {}", parser.read_position, count);
-        
-        if count < parser.read_position {
-            count += 1;
-            continue;
-        }
-        println!("Trying to skip token: {:?}", token);
         match token {
-            Token::OCurly => nest += 1,
-            Token::CCurly => nest -= 1,
+            Token::OCurly => {
+                if let Some(ref mut nst) = nest {
+                    *nst += 1;
+                }
+                else {
+                    nest = Some(1);
+                }
+            } 
+            Token::CCurly => { 
+                if let Some(ref mut nst) = nest {
+                    *nst -= 1;
+                }
+                else {
+                    panic!("Missing delimiter. Curr token: {:?}", token);
+                }
+            }
             Token::Eof => panic!("Hit Eof but delimiter is missing"),
             _ => {
-                if nest == 0 {
+                if nest == Some(0) {
                     panic!("Missing delimiter. Curr token: {:?}", token);
                 }
                 else {
@@ -45,7 +51,7 @@ fn skip_block(parser: &mut Parser) {
                 }
             }
         }
-        if nest == 0 {
+        if nest == Some(0) {
             println!("----Skipped block----\n");
             break;
         }

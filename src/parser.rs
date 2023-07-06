@@ -48,6 +48,20 @@ impl Parser {
         return None
     }
 
+    fn peek_token(&mut self) -> Option<&Token> {
+        if self.tokens.len() > 0 {
+            if self.consume_tokens {
+                println!("--Peeking at Token: {:?}", &self.tokens[0]);
+                return Some(&self.tokens[0]);
+            }
+            else {
+                println!("--Peeking at Token: {:?}, position: {}", &self.tokens[self.position], self.position);
+                return Some(&self.tokens[self.position]);
+            }
+        }
+        return None
+    }
+
     pub fn parse_tokens(&mut self, nest_start:  Option<usize>) {
         while let Some(token) = self.next_token() {
             println!("Parsing Token: {:?}", token);
@@ -162,15 +176,8 @@ impl Parser {
     }
 
     fn parse_next_expression(&mut self) -> bool {
-        let mut pos = 0;
-        if self.consume_tokens {
-            pos = 0;
-        }//if consuming tokens then 1 is peeking ahead, if not consume then self.pos is 1 ahead
-        else {
-            pos = self.position;
-        }
-        let token = &self.tokens[pos];
-        println!("Check token ahead: {:?}, pos: {}", token, pos);
+        let token = self.peek_token().unwrap();
+        println!("Check token ahead: {:?}", token);
         match token {
             Token::Operator(_) => return true,
             Token::Number(_) => return true,
