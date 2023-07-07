@@ -71,7 +71,7 @@ impl Lexer {
         while self.position < self.src.len() {
             self.ch = self.src[self.position];
 
-            if !self.ch.is_alphabetic() {
+            if !self.ch.is_alphabetic() && self.ch != '_' {
                 if self.ch.is_numeric(){
                     panic!("Cant put numbers in identifier");
                 }
