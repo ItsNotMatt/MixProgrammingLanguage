@@ -24,14 +24,14 @@ impl Cache {
         self.variables.insert(var.hash, var);
     }
 
-    pub fn get_var_from_string(&mut self, name: &String) -> &mut Variable {
+    pub fn get_var_from_string(&mut self, name: &String) -> Option<&mut Variable> {
         let mut s = DefaultHasher::new();
         name.hash(&mut s);
         if let Some(var) = self.variables.get_mut(&s.finish()) {
-            return var;
+            return Some(var);
         }
         else {
-            panic!("Not able to get var from string");
+            return None;
         }
     }
 
@@ -44,6 +44,7 @@ impl Cache {
         }
     }
 
+    //used when you want to grab a hash to a var to pass it to multiple places
     pub fn get_var_hash(&mut self, name: &String) -> Option<u64> {
         let mut s = DefaultHasher::new();
         name.hash(&mut s);
@@ -71,6 +72,7 @@ impl Cache {
         }
     }
 
+    //used when you want to grab a hash to a fn to pass it to multiple places
     pub fn get_fn_hash(&mut self, name: &String) -> Option<u64> {
         let mut s = DefaultHasher::new();
         name.hash(&mut s);

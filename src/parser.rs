@@ -145,9 +145,7 @@ impl Parser {
             }
             Token::String(s) => return Ok(Expr::String(s)),
             Token::Identifier(s) => {
-                let var = self.cache.get_var_from_string(&s);
-                let expr = var.to_expression();
-                return Ok(expr);
+                return Ok(self.get_expr_from_identifier(s));
             }
             Token::Operator(op) => return Ok(Expr::Operator(op)),
             Token::OParen => {
@@ -207,6 +205,7 @@ impl Parser {
         }
     }
 
+    //fn doesnt have return value, naked call aka print("test");
     fn parse_identifier(&mut self, identifier: String) {
         if let Some(hash) = self.cache.get_var_hash(&identifier) {
             variable::edit_var(self, hash);
@@ -219,6 +218,19 @@ impl Parser {
         }
     }
 
+    //used to find a var and turn into expr or call a fn and return an expr
+    fn get_expr_from_identifier(&mut self, identifier: String) -> Expr {
+        if let Some(var) = self.cache.get_var_from_string(&identifier) {
+            let expr = var.to_expression();
+            return expr;
+        }
+        else if let Some(hash) = self.cache.get_fn_hash(&identifier) {
+            return function::parse_function(self, hash).unwrap();
+        }
+        else {
+            panic!("Cant find identifier in this context.");
+        }
+    }
 
 }
 

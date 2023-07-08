@@ -100,5 +100,11 @@
     "title": "In cache have optional arguments and set it to the args passed into func, inside func check those args and make sure they match at the time. have a return value stored in cache and accessed there when fn used as expression?",
     "additionalNotes": null,
     "completed": false
+  },
+  {
+    "id": 18,
+    "title": "need to set args to none after use",
+    "additionalNotes": null,
+    "completed": false
   }
 ]
