@@ -63,7 +63,7 @@
     "id": 11,
     "title": "Configure with string and bool variable types",
     "additionalNotes": null,
-    "completed": false
+    "completed": true
   },
   {
     "id": 12,
@@ -85,25 +85,19 @@
   },
   {
     "id": 15,
-    "title": "middle of adding different support for bool and string types",
-    "additionalNotes": null,
-    "completed": false
-  },
-  {
-    "id": 16,
     "title": "Optimize: cloning to turn var into expression for string types",
     "additionalNotes": null,
     "completed": false
   },
   {
-    "id": 17,
+    "id": 16,
     "title": "while loops wont work as long as we start position at 0 instead of while position for double looping",
     "additionalNotes": null,
     "completed": false
   },
   {
-    "id": 18,
-    "title": "could make a public cache of the current arguments passes and then use whatever native function and access it",
+    "id": 17,
+    "title": "In cache have optional arguments and set it to the args passed into func, inside func check those args and make sure they match at the time. have a return value stored in cache and accessed there when fn used as expression?",
     "additionalNotes": null,
     "completed": false
   }

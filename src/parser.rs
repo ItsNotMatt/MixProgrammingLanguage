@@ -15,7 +15,7 @@ pub struct Parser {
     expression: Option<Expr>,
     statements: Vec<Expr>,
     nest: usize,
-    cache: Cache,
+    pub cache: Cache,
 }
 
 impl Parser {

@@ -3,6 +3,7 @@ use std::{collections::hash_map::DefaultHasher, hash::Hasher};
 use std::hash::Hash;
 
 use crate::ast::Expr;
+use crate::parser::Parser;
 
 #[derive(Debug, PartialEq, Clone, PartialOrd)]
 pub enum Type {
@@ -75,12 +76,12 @@ impl Variable {
 pub struct Function { 
     pub name: String,
     pub hash: u64,
-    pub func: Option<Box<dyn Fn(Box<dyn Any>)>>,
+    pub func: Option<Box<dyn Fn(Vec<Expr>) -> Option<Expr>>>,
     //later a list of tokens that will occur if func none aka non native
 }
 
 impl Function {
-    pub fn new(identifier: String, func: Option<Box<dyn Fn(Box<dyn Any>)>>) -> Self {
+    pub fn new(identifier: String, func: Option<Box<dyn Fn(Vec<Expr>) -> Option<Expr>>>) -> Self {
         let mut s = DefaultHasher::new();
         identifier.hash(&mut s);
         Self {

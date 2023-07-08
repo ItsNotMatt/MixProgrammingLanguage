@@ -1,4 +1,4 @@
-use std::any::Any;
+use std::{any::Any, cell::RefCell};
 
 use crate::{lexer::Token, data_types::Function, ast::Expr};
 
@@ -9,7 +9,7 @@ pub fn parse_function(parser: &mut Parser, hash: u64) {
     match parser.next_token().unwrap() {
         Token::OParen => {
             if parser.peek_token().unwrap() == &Token::CParen {
-                call_native(parser, hash, None);
+                call_native(parser, hash);
                 return;
             }
             loop {
@@ -26,22 +26,42 @@ pub fn parse_function(parser: &mut Parser, hash: u64) {
         _ => panic!("Token after function isnt valid"),
     }
 
-    call_native(parser, hash, Some(args));
+    if args.is_empty() { parser.cache.args = None; }
+    else { parser.cache.args = Some(args); }
+    call_native(parser, hash);
 }
 
-fn call_native(parser: &mut Parser, hash: u64, args: Option<Vec<Expr>>) {
-    let func = parser.cache.get_fn_from_hash(hash);
-    if let Some(f) = func.func.as_ref() {
-        if let Some(args) = args {
-            let args: Box<dyn Any> = Box::new(args);
-            (f)(args);
-        }
-        else {
-            println!("No function arguments passed");
-            let args: Box<dyn Any> = Box::new(-69420);
+fn call_native(parser: &mut Parser, hash: u64) {
+    if let Some(args) = parser.cache.args.clone() {
+        let func = parser.cache.get_fn_from_hash(hash);
+        if let Some(f) = func.func.as_ref() {
             (f)(args);
         }
     }
+    else {
+        let func = parser.cache.get_fn_from_hash(hash);
+        if let Some(f) = func.func.as_ref() {
+            let args: Vec<Expr> = Vec::new();
+            (f)(args);
+        }
+    }
+    parser.cache.args = None;
 }
 
+fn call_native_as_expression(parser: &mut Parser, hash: u64) {
+    if let Some(args) = parser.cache.args.clone() {
+        let func = parser.cache.get_fn_from_hash(hash);
+        if let Some(f) = func.func.as_ref() {
+            (f)(args);
+        }
+    }
+    else {
+        let func = parser.cache.get_fn_from_hash(hash);
+        if let Some(f) = func.func.as_ref() {
+            let args: Vec<Expr> = Vec::new();
+            (f)(args);
+        }
+    }
+    parser.cache.args = None;
+}
 

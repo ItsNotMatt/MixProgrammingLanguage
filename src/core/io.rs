@@ -1,15 +1,14 @@
-use std::any::Any;
+use crate::{ast::Expr, parser::{self, Parser}};
 
-use crate::ast::Expr;
+pub fn print(args: Vec<Expr>) -> Option<Expr> {
+    for arg in args {
+        println!("{}", arg);
+    }
+    None
+}
 
-pub fn print(args: Box<dyn Any>) {
-    if let Some(args) = args.downcast_ref::<Vec<Expr>>() {
-        for arg in args {
-            println!("{}", arg);
-        }
-    }
-    else {
-        panic!("Invalid argument types passed into function");
-    }
-    
+pub fn input(args: Vec<Expr>) -> Option<Expr> {
+    let input = String::new();
+    println!("{}", input);
+    Some(Expr::Number(0))
 }
