@@ -64,6 +64,14 @@ fn reassign_var(parser: &mut Parser, hash: u64, expr: Expr) {
                 _ => panic!("Unsupported reassignment to var, cant reassign var to this type"),
             }
         }
+        Type::String(s) => {
+            match expr {
+                Expr::String(str) => {
+                    s.value = str;
+                }
+                _ => panic!("Unsupported reassignment to var, cant reassign var to this type"),
+            }
+        }
         _ => panic!("Unsupported reassignment to var, cant reassign var to this type"),
     }
 }

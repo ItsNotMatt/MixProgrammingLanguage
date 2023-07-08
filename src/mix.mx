@@ -1,3 +1,5 @@
-let name = input("give me your name");
-
-print("Your name is:", name);
+let test = input();
+while test != "hello" {
+    print("invalid input!");
+    test = input();
+}
