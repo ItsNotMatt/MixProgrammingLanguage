@@ -5,6 +5,7 @@ pub fn print(args: Vec<Expr>) -> Option<Expr> {
     for arg in args {
         print!("{}", arg);
     }
+    println!("\n");
     None
 }
 
@@ -22,7 +23,6 @@ pub fn input(args: Vec<Expr>) -> Option<Expr> {
     }
     
     io::stdin().read_line(&mut input).expect("Failed to read input from user");
-    println!("{}", input);
 
     Some(Expr::String(input.trim().to_string()))
 }

@@ -1,2 +1,2 @@
-let in = input();
-print(in);
+print("testing this shit out");
+let x = input("give me something:");

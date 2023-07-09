@@ -219,6 +219,7 @@ impl Parser {
     }
 
     //used to find a var and turn into expr or call a fn and return an expr
+    //peek ahead to see if . after expression to edit the var or sum before returning
     fn get_expr_from_identifier(&mut self, identifier: String) -> Expr {
         if let Some(var) = self.cache.get_var_from_string(&identifier) {
             let expr = var.to_expression();

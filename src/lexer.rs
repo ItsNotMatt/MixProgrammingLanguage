@@ -15,6 +15,7 @@ pub enum Token {
     Operator(Operator),
     Equal,
     Bang,
+    Dot,
     Keyword(Key),
     OParen,
     CParen,
@@ -158,6 +159,9 @@ impl Lexer {
                 }
                 ',' => {
                     tokens.push(Token::Comma);
+                }
+                '.' => {
+                    tokens.push(Token::Dot);
                 }
                 '(' => {
                     tokens.push(Token::OParen);

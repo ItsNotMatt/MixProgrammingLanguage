@@ -1,12 +1,10 @@
-use std::{collections::{HashMap, hash_map::DefaultHasher}, hash::{Hash, Hasher}, any::Any};
+use std::{collections::{HashMap, hash_map::DefaultHasher}, hash::{Hash, Hasher}};
 
-use crate::{data_types::{Variable, Function}, ast::Expr};
+use crate::data_types::{Variable, Function};
 
 pub struct Cache {
     variables: HashMap<u64, Variable>,
     functions: HashMap<u64, Function>,
-    pub args: Option<Vec<Expr>>,
-    pub returned_args: Option<Vec<Expr>>,
 }
 
 impl Cache {
@@ -14,8 +12,6 @@ impl Cache {
         Self {
             variables: HashMap::new(),
             functions: HashMap::new(),
-            args: None,
-            returned_args: None,
         }
     }
 
