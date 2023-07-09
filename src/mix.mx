@@ -1,5 +1,2 @@
-let test = input();
-while test != "hello" {
-    print("invalid input!");
-    test = input();
-}
+let in = input();
+print(in);

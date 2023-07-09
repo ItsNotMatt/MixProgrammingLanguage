@@ -115,7 +115,6 @@ impl Lexer {
         self.read_position = self.position;
         while self.position < self.src.len() {
             self.ch = self.src[self.position];
-            println!("reading string ch: {}", self.ch);
             if self.ch == '"' {
                 println!("ch is quote");
                 let slice = self.src[self.read_position..self.position].to_vec();

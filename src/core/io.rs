@@ -3,7 +3,7 @@ use crate::ast::Expr;
 
 pub fn print(args: Vec<Expr>) -> Option<Expr> {
     for arg in args {
-        println!("{}", arg);
+        print!("{}", arg);
     }
     None
 }
