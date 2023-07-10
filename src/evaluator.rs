@@ -80,4 +80,3 @@ pub fn compare(left: &Expr, right: &Expr, op: ComparisonOperator) -> Expr {
     }
 }
 
-

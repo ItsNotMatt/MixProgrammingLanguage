@@ -10,10 +10,8 @@ mod keyword;
 pub struct Parser {
     tokens: Vec<Token>,
     position: usize,
-    read_position: usize,
     consume_tokens: bool,
     expression: Option<Expr>,
-    statements: Vec<Expr>,
     nest: usize,
     pub cache: Cache,
 }
@@ -23,10 +21,8 @@ impl Parser {
         Self {
             tokens,
             position: 0,
-            read_position: 0,
             consume_tokens: true,
             expression: None,
-            statements: Vec::new(),
             nest: 0,
             cache,
         }
@@ -41,7 +37,7 @@ impl Parser {
             else {
                 let token = self.tokens[self.position].clone();
                 self.position += 1;
-                println!("--Copying token: {:?}, position: {}", token, self.position);
+                //println!("--Copying token: {:?}, position: {}", token, self.position);
                 return Some(token);
             }
         }
@@ -77,9 +73,11 @@ impl Parser {
                 }
                 Token::Semi => {
                     self.expression = None;
+                    self.cache.current_var = None;
                     //creates statement and ends last expression
                 }
                 Token::CParen => {
+                    println!("Close paren in parse token func");
                     continue;
                 }
                 Token::OCurly => {
@@ -211,7 +209,7 @@ impl Parser {
             variable::edit_var(self, hash);
         }
         else if let Some(hash) = self.cache.get_fn_hash(&identifier) {
-            function::parse_function(self, hash);
+            function::parse_function(self, hash, None);
         }
         else {
             panic!("Cant find identifier in this context.");
@@ -221,17 +219,27 @@ impl Parser {
     //used to find a var and turn into expr or call a fn and return an expr
     //peek ahead to see if . after expression to edit the var or sum before returning
     fn get_expr_from_identifier(&mut self, identifier: String) -> Expr {
-        if let Some(var) = self.cache.get_var_from_string(&identifier) {
-            let expr = var.to_expression();
-            return expr;
+        if let Some(hash) = self.cache.get_var_hash(&identifier) {
+            if self.peek_token().unwrap()  == &Token::Dot {
+                let expr = function::parse_var_chain(self, hash);
+                return expr;
+            }
+            else {
+                let var = self.cache.get_var_from_hash(hash);
+                return var.to_expression();
+            }
         }
         else if let Some(hash) = self.cache.get_fn_hash(&identifier) {
-            return function::parse_function(self, hash).unwrap();
+            let mut expr = function::parse_function(self, hash, None).unwrap();
+            if self.peek_token().unwrap()  == &Token::Dot {
+                self.next_token().unwrap(); //to get rid of dot
+                expr = function::parse_fn_chain(self, expr);
+            }
+            return expr; 
         }
         else {
             panic!("Cant find identifier in this context.");
         }
     }
-
 }
 

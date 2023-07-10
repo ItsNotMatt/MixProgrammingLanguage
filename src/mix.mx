@@ -1,2 +1,2 @@
-print("testing this shit out");
-let x = input("give me something:");
+let num = input("Give me a num").to_int().to_string();
+print("number is ", num);

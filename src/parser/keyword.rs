@@ -65,7 +65,6 @@ pub fn parse_while(parser: &mut Parser, expr: Option<Expr>) {//need to start cop
     match expr {
         Expr::Bool(b) => {
             if b {
-                parser.read_position = parser.position;
                 println!("statement is true, entering while statement");
                 parser.parse_tokens(Some(parser.nest));
                 std::thread::sleep(time::Duration::from_millis(20));
@@ -74,7 +73,6 @@ pub fn parse_while(parser: &mut Parser, expr: Option<Expr>) {//need to start cop
             }
             else {
                 parser.consume_tokens = true;
-                parser.read_position = parser.position;
                 //clear_copied_tokens(parser);
                 println!("\n----Skipping while block----");
                 skip_block(parser);
@@ -82,11 +80,6 @@ pub fn parse_while(parser: &mut Parser, expr: Option<Expr>) {//need to start cop
         }
         _ => panic!("Expression isnt a boolean"),
     }
-}
-
-fn clear_copied_tokens(parser: &mut Parser) {
-    println!("---Clearing tokens up to {:?}, pos: {}", parser.tokens[parser.read_position], parser.read_position);
-    parser.tokens.drain(0..=parser.read_position); 
 }
 
 

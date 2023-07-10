@@ -106,5 +106,17 @@
     "title": "need to set args to none after use",
     "additionalNotes": null,
     "completed": false
+  },
+  {
+    "id": 19,
+    "title": "give expr if a func so parse chain can use that expr in the next func. if its a var then it will use the var previous and get expr from that if needed",
+    "additionalNotes": null,
+    "completed": false
+  },
+  {
+    "id": 20,
+    "title": "pass an option<Expr> to parse fn and if its Some then push it to beginning of Vec<Expr>. This can be considered self if the function takes self as a parameter?",
+    "additionalNotes": null,
+    "completed": false
   }
 ]

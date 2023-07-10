@@ -5,6 +5,7 @@ use crate::data_types::{Variable, Function};
 pub struct Cache {
     variables: HashMap<u64, Variable>,
     functions: HashMap<u64, Function>,
+    pub current_var: Option<u64>,
 }
 
 impl Cache {
@@ -12,6 +13,7 @@ impl Cache {
         Self {
             variables: HashMap::new(),
             functions: HashMap::new(),
+            current_var: None,
         }
     }
 
