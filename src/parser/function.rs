@@ -42,7 +42,6 @@ fn call_native(parser: &mut Parser, hash: u64, args: Vec<Expr>) -> Option<Expr> 
 }
 
 
-
 pub fn parse_var_chain(parser: &mut Parser, hash: u64) -> Expr {
     println!("Parsing chain after var");
     let var = parser.cache.get_var_from_hash(hash);

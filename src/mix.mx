@@ -1,2 +1,14 @@
-let num = input("Give me a num").to_int().to_string();
-print("number is ", num);
+let guess = input("Give me a num").to_int();
+let random_num = 90;
+
+while guess != random_num {
+    print("Guess is: ", guess, "Random num: ", random_num);
+    if guess > random_num {
+            print("Too high");
+        }
+    if guess < random_num {
+            print("Too low");
+        }
+    guess = input("Give me another number").to_int();
+}
+print("You guessed right!");

@@ -31,7 +31,7 @@ impl Parser {
     fn next_token(&mut self) -> Option<Token> {
         if self.tokens.len() > 0 {
             if self.consume_tokens {
-                println!("--Consuming Token: {:?}", self.tokens[0].clone());
+                //println!("--Consuming Token: {:?}", self.tokens[0].clone());
                 return Some(self.tokens.remove(0));
             }
             else {
@@ -47,11 +47,11 @@ impl Parser {
     fn peek_token(&mut self) -> Option<&Token> {
         if self.tokens.len() > 0 {
             if self.consume_tokens {
-                println!("--Peeking at Token: {:?}", &self.tokens[0]);
+                //println!("--Peeking at Token: {:?}", &self.tokens[0]);
                 return Some(&self.tokens[0]);
             }
             else {
-                println!("--Peeking at Token: {:?}, position: {}", &self.tokens[self.position], self.position);
+                //println!("--Peeking at Token: {:?}, position: {}", &self.tokens[self.position], self.position);
                 return Some(&self.tokens[self.position]);
             }
         }
@@ -173,7 +173,7 @@ impl Parser {
 
     fn parse_next_expression(&mut self) -> bool {
         let token = self.peek_token().unwrap();
-        println!("Check token ahead: {:?}", token);
+        //println!("Check token ahead: {:?}", token);
         match token {
             Token::Operator(_) => return true,
             Token::Number(_) => return true,

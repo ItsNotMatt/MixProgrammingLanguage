@@ -51,6 +51,7 @@ fn arithmetic(left: &Expr, right: &Expr, op: ArithmeticOperator) -> Expr {
 }
 
 pub fn compare(left: &Expr, right: &Expr, op: ComparisonOperator) -> Expr {
+    println!("Evaluating {}, {:?}, {}", left, op, right);
     match (left, right) {
         (Expr::Number(l), Expr::Number(r)) => {
             match op {
