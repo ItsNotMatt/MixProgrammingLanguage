@@ -1,5 +1,18 @@
 use crate::ast::Expr;
 
+//Edit Variable
+pub fn move_var(args: Vec<Expr>) -> Option<Expr> {
+    if args.len() > 1 { panic!("This function only takes one argument of self"); }
+    match &args[0] {
+        Expr::Identifier(s) => {
+        }
+        _ => panic!("Cant use method move on this type"),
+    }
+    None
+}
+
+
+//Conversions
 pub fn to_int(args: Vec<Expr>) -> Option<Expr> {
     if args.len() > 1 { panic!("This function only takes one argument of self"); }
     match &args[0] {

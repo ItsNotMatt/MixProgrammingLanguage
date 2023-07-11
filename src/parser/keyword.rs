@@ -58,10 +58,10 @@ fn skip_block(parser: &mut Parser) {
     }
 }
 
-pub fn parse_while(parser: &mut Parser, expr: Option<Expr>) {//need to start copying at expression not at Ocurly
+pub fn parse_while(parser: &mut Parser) {//need to start copying at expression not at Ocurly
     println!("attempting to enter while loop");
     parser.consume_tokens = false;
-    let expr = expr.unwrap_or_else(|| parser.get_expr());
+    let expr = parser.get_expr();
     match expr {
         Expr::Bool(b) => {
             if b {
@@ -69,7 +69,7 @@ pub fn parse_while(parser: &mut Parser, expr: Option<Expr>) {//need to start cop
                 parser.parse_tokens(Some(parser.nest));
                 std::thread::sleep(time::Duration::from_millis(20));
                 parser.position = 0;
-                parse_while(parser, None);
+                parse_while(parser);
             }
             else {
                 parser.consume_tokens = true;

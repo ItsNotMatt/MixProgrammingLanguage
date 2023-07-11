@@ -195,7 +195,7 @@ impl Parser {
                 keyword::parse_if(self);
             }
             Key::While => {
-                keyword::parse_while(self, None);
+                keyword::parse_while(self);
             }
             _ => {
                 panic!("Unsupported key word");
@@ -221,7 +221,9 @@ impl Parser {
     fn get_expr_from_identifier(&mut self, identifier: String) -> Expr {
         if let Some(hash) = self.cache.get_var_hash(&identifier) {
             if self.peek_token().unwrap()  == &Token::Dot {
-                let expr = function::parse_var_chain(self, hash);
+                self.next_token().unwrap(); //to get rid of dot
+                let mut expr = self.cache.get_var_from_hash(hash).to_expression();
+                expr = function::parse_fn_chain(self, expr);
                 return expr;
             }
             else {

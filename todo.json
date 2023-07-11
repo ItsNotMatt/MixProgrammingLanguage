@@ -19,103 +19,79 @@
   },
   {
     "id": 4,
-    "title": "Lexer: check ahead only returns true, not as verbose if you need to check ahead for multiple things. Can also just call check ahead twice",
-    "additionalNotes": null,
-    "completed": false
-  },
-  {
-    "id": 5,
     "title": "Future: Add scope id to a variable based on where it was created",
     "additionalNotes": null,
     "completed": false
   },
   {
-    "id": 6,
+    "id": 5,
     "title": "for scope can create new scope when needed and assign it an id and a parent scope",
     "additionalNotes": null,
     "completed": false
   },
   {
-    "id": 7,
+    "id": 6,
     "title": "Todo: while, if comparison static dont recheck every loop. if hit } and nest = startnest then restart while and check comparison again. break keyword to end loop at point.",
     "additionalNotes": null,
     "completed": false
   },
   {
-    "id": 8,
-    "title": "need to not consume tokens while in while loop, just copy",
-    "additionalNotes": null,
-    "completed": false
-  },
-  {
-    "id": 9,
-    "title": "self.position will be 1 ahead always",
-    "additionalNotes": null,
-    "completed": false
-  },
-  {
-    "id": 10,
+    "id": 7,
     "title": "Nested loops",
     "additionalNotes": null,
     "completed": false
   },
   {
-    "id": 11,
+    "id": 8,
     "title": "Configure with string and bool variable types",
     "additionalNotes": null,
     "completed": true
   },
   {
-    "id": 12,
+    "id": 9,
     "title": "Native functions",
     "additionalNotes": null,
-    "completed": false
+    "completed": true
   },
   {
-    "id": 13,
+    "id": 10,
     "title": "Custom functions",
     "additionalNotes": null,
     "completed": false
   },
   {
-    "id": 14,
+    "id": 11,
     "title": "Variable scope",
     "additionalNotes": null,
     "completed": false
   },
   {
-    "id": 15,
+    "id": 12,
     "title": "Optimize: cloning to turn var into expression for string types",
     "additionalNotes": null,
     "completed": false
   },
   {
-    "id": 16,
+    "id": 13,
     "title": "while loops wont work as long as we start position at 0 instead of while position for double looping",
     "additionalNotes": null,
     "completed": false
   },
   {
-    "id": 17,
+    "id": 14,
     "title": "In cache have optional arguments and set it to the args passed into func, inside func check those args and make sure they match at the time. have a return value stored in cache and accessed there when fn used as expression?",
     "additionalNotes": null,
     "completed": false
   },
   {
-    "id": 18,
-    "title": "need to set args to none after use",
-    "additionalNotes": null,
-    "completed": false
-  },
-  {
-    "id": 19,
-    "title": "give expr if a func so parse chain can use that expr in the next func. if its a var then it will use the var previous and get expr from that if needed",
-    "additionalNotes": null,
-    "completed": false
-  },
-  {
-    "id": 20,
+    "id": 15,
     "title": "pass an option<Expr> to parse fn and if its Some then push it to beginning of Vec<Expr>. This can be considered self if the function takes self as a parameter?",
+    "additionalNotes": null,
+    "completed": true
+  },
+  {
+    "id": 16,
+    "title": "Hoist: If parsing identifier and next token is ( then can search tokens till identifier is found after fn. If no identifier matches and its not a decleration aka after fn then throw error",
     "additionalNotes": null,
     "completed": false
   }
