@@ -53,6 +53,7 @@ pub enum Key {
     True,
     False,
     Break,
+    Const,
 }
 
 #[derive(Debug, Clone, PartialEq, PartialOrd)]

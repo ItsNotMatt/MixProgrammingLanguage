@@ -79,18 +79,12 @@
   },
   {
     "id": 14,
-    "title": "In cache have optional arguments and set it to the args passed into func, inside func check those args and make sure they match at the time. have a return value stored in cache and accessed there when fn used as expression?",
-    "additionalNotes": null,
-    "completed": false
-  },
-  {
-    "id": 15,
     "title": "pass an option<Expr> to parse fn and if its Some then push it to beginning of Vec<Expr>. This can be considered self if the function takes self as a parameter?",
     "additionalNotes": null,
     "completed": true
   },
   {
-    "id": 16,
+    "id": 15,
     "title": "Hoist: If parsing identifier and next token is ( then can search tokens till identifier is found after fn. If no identifier matches and its not a decleration aka after fn then throw error",
     "additionalNotes": null,
     "completed": false

@@ -1,8 +1,2 @@
-let num = 10;
-
-if num == 10 {
-    print("Num is 5");
-}
-else {
-    print("Num aint 5");
-}
+const x = 10;
+x += 12;

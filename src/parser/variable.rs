@@ -2,7 +2,7 @@ use crate::{lexer::Token, ast::{Expr, ArithmeticOperator, Operator, BinExpr}, da
 
 use super::Parser;
 
-fn create_var(parser: &mut Parser, identifier: String, expr: Expr) {
+fn create_var(parser: &mut Parser, identifier: String, expr: Expr, mutable: bool) {
     let data_type: Type = match expr {
             Expr::Number(n) => {
                 Type::Int(IntType { value: n })
@@ -17,11 +17,11 @@ fn create_var(parser: &mut Parser, identifier: String, expr: Expr) {
                 panic!("Unable to create var of this type");
             }
         };
-        let var = Variable::new(identifier, data_type); 
+        let var = Variable::new(identifier, data_type, mutable); 
         parser.cache.add_var(var);
 }
 
-pub fn assign_var(parser: &mut Parser) {
+pub fn assign_var(parser: &mut Parser, mutable: bool) {
     let token = parser.next_token().unwrap();
     match token {
         Token::Identifier(s) => {
@@ -30,7 +30,7 @@ pub fn assign_var(parser: &mut Parser) {
             match token {//should be = after var
                 Token::Equal => {
                     let expr = parser.get_expr();
-                    create_var(parser, s, expr);
+                    create_var(parser, s, expr, mutable);
                 }
                 _ => {
                     panic!("Operand not supported after declaration {}", s);
@@ -43,8 +43,12 @@ pub fn assign_var(parser: &mut Parser) {
     }
 }
 
+//when var set = to something
 fn reassign_var(parser: &mut Parser, hash: u64, expr: Expr) {
     let var = parser.cache.get_var_from_hash(hash);
+    if !var.mutable {
+        panic!("Cant edit value of this variable");
+    }
     match &mut var.data_type {
         Type::Int(i) => {
              match expr {
@@ -79,6 +83,10 @@ fn reassign_var(parser: &mut Parser, hash: u64, expr: Expr) {
 fn change_val_by_expr(parser: &mut Parser, hash: u64, operator: Operator) {
     let expr = parser.get_expr();
     let var = parser.cache.get_var_from_hash(hash);
+    if !var.mutable {
+        panic!("Cant edit value of this variable");
+    }
+
     let var_expr = var.to_expression();
     let bin_expr = Expr::BinExpr(BinExpr {
         left: Box::new(var_expr),
@@ -89,6 +97,7 @@ fn change_val_by_expr(parser: &mut Parser, hash: u64, operator: Operator) {
     var.reassign_data_from_expr(value);
 }
 
+//when operator like += used
 pub fn edit_var(parser: &mut Parser, hash: u64) {
     println!("Editing variable");
 

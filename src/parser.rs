@@ -76,8 +76,6 @@ impl Parser {
                 }
                 Token::Semi => {
                     self.expression = None;
-                    self.cache.current_var = None;
-                    //creates statement and ends last expression
                 }
                 Token::CParen => {
                     println!("Close paren in parse token func");
@@ -192,7 +190,8 @@ impl Parser {
         println!("\n---Parsing key word: {:?}", key);
         
         match key {
-            Key::Let => variable::assign_var(self),
+            Key::Let => variable::assign_var(self, true),
+            Key::Const => variable::assign_var(self, false),
             Key::If =>  keyword::parse_if(self),
             Key::While => keyword::parse_while(self, None),
             Key::Else => keyword::skip_block(self), 

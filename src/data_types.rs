@@ -29,16 +29,18 @@ pub struct Variable {
     pub name: String,
     pub hash: u64,
     pub data_type: Type, 
+    pub mutable: bool,
 }
 
 impl Variable {
-    pub fn new(identifier: String, data_type: Type) -> Self {
+    pub fn new(identifier: String, data_type: Type, mutable: bool) -> Self {
         let mut s = DefaultHasher::new();
         identifier.hash(&mut s);
         Self {
             name: identifier,
             hash: s.finish(),
             data_type,
+            mutable,
         }
     }
 
