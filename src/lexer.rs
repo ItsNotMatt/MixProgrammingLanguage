@@ -61,6 +61,9 @@ impl Lexer {
             "false" => {
                 return Some(Token::Keyword(Key::False));
             }
+            "break" => {
+                return Some(Token::Keyword(Key::Break));
+            }
             _ => {
                 return None;
             }

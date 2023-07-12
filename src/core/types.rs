@@ -18,7 +18,7 @@ pub fn to_int(args: Vec<Expr>) -> Option<Expr> {
     match &args[0] {
         Expr::String(s) => {
             println!("Converting to int");
-            let num: i32 = s.parse().unwrap();
+            let num: i32 = s.parse().expect("Cant convert this type to int");
             return Some(Expr::Number(num));
         }
         _ => { panic!("Cant use method to_int on this type"); }

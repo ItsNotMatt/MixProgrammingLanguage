@@ -1,4 +1,9 @@
-let guess = input("Give me a num");
-let num = guess.to_int();
+let num = 10;
 
-print("num is: ", num);
+while num < 100 {
+    num += 1;
+    print(num);
+    if num > 50 {
+        break;
+    }
+}

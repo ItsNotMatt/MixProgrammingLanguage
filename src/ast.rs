@@ -52,6 +52,7 @@ pub enum Key {
     Else,
     True,
     False,
+    Break,
 }
 
 #[derive(Debug, Clone, PartialEq, PartialOrd)]

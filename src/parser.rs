@@ -58,7 +58,7 @@ impl Parser {
         return None
     }
 
-    pub fn parse_tokens(&mut self, nest_start:  Option<usize>) {
+    pub fn parse_tokens(&mut self, nest_start:  Option<usize>) -> Option<Expr> {
         while let Some(token) = self.next_token() {
             println!("Parsing Token: {:?}", token);
             match token {
@@ -66,7 +66,10 @@ impl Parser {
                     self.parse_identifier(s);
                 }
                 Token::Keyword(k) => {
-                    self.parse_keyword(k);
+                    match k {
+                        Key::Break => return Some(Expr::Bool(false)),
+                        _ => self.parse_keyword(&k),
+                    }
                 }
                 Token::Number(n) => {
                     self.parse_bin_expr(Some(Expr::Number(n)));
@@ -88,7 +91,7 @@ impl Parser {
                 }
                 Token::Eof => {
                     println!("End of file");
-                    return;
+                    return None ;
                 }
                 _ => {
                     panic!("Cant parse token");
@@ -98,10 +101,11 @@ impl Parser {
                 println!("   Curr nest {}, start: {}", self.nest, n);
                 if self.nest == n {
                     println!("breaking from current loop");
-                    break;
+                    return None;
                 }
             } 
         }
+        None
     }
 
     fn parse_bin_expr(&mut self, expr: Option<Expr>) -> Expr {
@@ -184,7 +188,7 @@ impl Parser {
         }
     }
 
-    fn parse_keyword(&mut self, key: Key) {
+    fn parse_keyword(&mut self, key: &Key) {
         println!("\n---Parsing key word: {:?}", key);
         
         match key {
@@ -195,7 +199,7 @@ impl Parser {
                 keyword::parse_if(self);
             }
             Key::While => {
-                keyword::parse_while(self);
+                keyword::parse_while(self, None);
             }
             _ => {
                 panic!("Unsupported key word");
@@ -243,5 +247,6 @@ impl Parser {
             panic!("Cant find identifier in this context.");
         }
     }
+
 }
 

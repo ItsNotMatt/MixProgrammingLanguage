@@ -5,7 +5,7 @@ pub fn print(args: Vec<Expr>) -> Option<Expr> {
     for arg in args {
         print!("{}", arg);
     }
-    println!("\n");
+    print!("\n");
     None
 }
 
