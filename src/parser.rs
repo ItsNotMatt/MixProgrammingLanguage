@@ -98,7 +98,7 @@ impl Parser {
                 }
             }
             if let Some(n) = nest_start {
-                println!("   Curr nest {}, start: {}", self.nest, n);
+                println!("--Curr nest {}, start: {}", self.nest, n);
                 if self.nest == n {
                     println!("breaking from current loop");
                     return None;
@@ -192,18 +192,12 @@ impl Parser {
         println!("\n---Parsing key word: {:?}", key);
         
         match key {
-            Key::Let => {
-                variable::assign_var(self);
-            }
-            Key::If => {
-                keyword::parse_if(self);
-            }
-            Key::While => {
-                keyword::parse_while(self, None);
-            }
-            _ => {
-                panic!("Unsupported key word");
-            }
+            Key::Let => variable::assign_var(self),
+            Key::If =>  keyword::parse_if(self),
+            Key::While => keyword::parse_while(self, None),
+            Key::Else => keyword::skip_block(self), 
+            _ => panic!("Unsupported key word"),
+            
         }
     }
 

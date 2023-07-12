@@ -1,6 +1,6 @@
 use core::time;
 
-use crate::{ast::Expr, lexer::Token};
+use crate::{ast::{Expr, Key}, lexer::Token};
 
 use super::Parser;
 
@@ -10,7 +10,7 @@ pub fn parse_if(parser: &mut Parser) {
         Expr::Bool(b) => {
             if b {
                 println!("statement is true, entering if statement");
-                parser.parse_tokens(Some(parser.nest));//so the if statement can know when its over
+                parser.parse_tokens(Some(parser.nest));//so parse_tokens knows when it hits end of block 
             }
             else {
                 println!("\n----Skipping if block----");
@@ -21,40 +21,39 @@ pub fn parse_if(parser: &mut Parser) {
     }
 }
 
-fn skip_block(parser: &mut Parser) {
+//generic name incase we need it to parse something else other than else later
+pub fn parse_block(parser: &mut Parser) {
+    println!("Parsing else block");
+    parser.parse_tokens(Some(parser.nest));//so parse_tokens knows when it hits end of block
+}
+
+pub fn skip_block(parser: &mut Parser) {
     let mut nest: Option<usize> = None;
     while let Some(token) = parser.next_token() {
         match token {
             Token::OCurly => {
-                if let Some(ref mut nst) = nest {
-                    *nst += 1;
-                }
-                else {
-                    nest = Some(1);
-                }
+                if let Some(ref mut nst) = nest { *nst += 1; }
+                else { nest = Some(1); }
             } 
             Token::CCurly => { 
-                if let Some(ref mut nst) = nest {
-                    *nst -= 1;
-                }
-                else {
-                    panic!("Missing delimiter. Curr token: {:?}", token);
-                }
+                if let Some(ref mut nst) = nest { *nst -= 1; }
+                else { panic!("Missing delimiter. Curr token: {:?}", token); }
             }
             Token::Eof => panic!("Hit Eof but delimiter is missing"),
             _ => {
-                if nest == Some(0) {
-                    panic!("Missing delimiter. Curr token: {:?}", token);
-                }
-                else {
-                    println!("Skipping token: {:?}", token);
-                }
+                if nest == Some(0) { panic!("Missing delimiter. Curr token: {:?}", token); }
+                else { println!("Skipping token: {:?}", token); }
             }
         }
         if nest == Some(0) {
             println!("----Skipped block----\n");
             break;
         }
+    }
+    //else is only triggered if skip block happened meaning it must be the case
+    if parser.peek_token().unwrap()  == &Token::Keyword(Key::Else) {
+        parser.next_token().unwrap(); 
+        parse_block(parser);
     }
 }
 
