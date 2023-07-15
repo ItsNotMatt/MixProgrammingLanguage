@@ -10,8 +10,9 @@ mod keyword;
 pub struct Parser {
     tokens: Vec<Token>,
     position: usize,
+    read_position: Vec<usize>,
     consume_tokens: bool,
-    expression: Option<Expr>,
+    expression: Option<Expr>,//attempt to get rid of sometime
     nest: usize,
     pub cache: Cache,
 }
@@ -21,6 +22,7 @@ impl Parser {
         Self {
             tokens,
             position: 0,
+            read_position: Vec::new(),
             consume_tokens: true,
             expression: None,
             nest: 0,
@@ -31,8 +33,8 @@ impl Parser {
     fn next_token(&mut self) -> Option<Token> {
         if self.tokens.len() > 0 {
             if self.consume_tokens {
-                //println!("--Consuming Token: {:?}", self.tokens[0].clone());
-                return Some(self.tokens.remove(0));
+                //println!("--Consuming Token: {:?}", self.tokens[self.position].clone());
+                return Some(self.tokens.remove(self.position));
             }
             else {
                 let token = self.tokens[self.position].clone();
@@ -89,7 +91,7 @@ impl Parser {
                 }
                 Token::Eof => {
                     println!("End of file");
-                    return None ;
+                    return None;
                 }
                 _ => {
                     panic!("Cant parse token");
@@ -192,7 +194,10 @@ impl Parser {
         match key {
             Key::Let => variable::assign_var(self, true),
             Key::If =>  keyword::parse_if(self),
-            Key::While => keyword::parse_while(self, None),
+            Key::While => {
+                self.read_position.push(self.position);
+                keyword::parse_while(self, None);
+            }
             Key::Else => {
                 let _ = keyword::skip_block(self);
             } 

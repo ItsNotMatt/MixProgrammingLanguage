@@ -28,6 +28,9 @@ pub fn parse_block(parser: &mut Parser) {
 }
 
 pub fn skip_block(parser: &mut Parser) -> Vec<Token> {
+    println!("Nest is: {}", parser.nest);
+    if parser.nest == 0 { parser.consume_tokens = true;}
+    else { parser.consume_tokens = false;}
     let mut nest: Option<usize> = None;
     let mut tokens: Vec<Token> = Vec::new();
     while let Some(token) = parser.next_token() {
@@ -61,22 +64,19 @@ pub fn skip_block(parser: &mut Parser) -> Vec<Token> {
 }
 
 pub fn parse_while(parser: &mut Parser, expr: Option<Expr>) {//need to start copying at expression not at Ocurly
-    println!("attempting to enter while loop");
     parser.consume_tokens = false;
+    parser.position = parser.read_position[parser.read_position.len() - 1];
+    println!("Attempting to enter while loop at position: {}", parser.position);
     let expr = expr.unwrap_or_else(|| parser.get_expr());
     match expr {
         Expr::Bool(b) => {
             if b {
                 println!("statement is true, entering while statement");
-                let expr = parser.parse_tokens(Some(parser.nest));
-                //oh shit?
-                std::thread::sleep(time::Duration::from_millis(20));
-                parser.position = 0;
-                parse_while(parser, expr);
+                let expr_bool = parser.parse_tokens(Some(parser.nest));
+                parse_while(parser, expr_bool);
             }
             else {
-                parser.consume_tokens = true;
-                //clear_copied_tokens(parser);
+                parser.read_position.remove(parser.read_position.len() - 1);
                 println!("\n----Skipping while block----");
                 skip_block(parser);
             }

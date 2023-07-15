@@ -88,5 +88,11 @@
     "title": "Hoist: If parsing identifier and next token is ( then can search tokens till identifier is found after fn. If no identifier matches and its not a decleration aka after fn then throw error",
     "additionalNotes": null,
     "completed": false
+  },
+  {
+    "id": 16,
+    "title": "push vec<tokens> to front of tokens to parse_token starting from custom fn? allows you to call a custom fn and then parse_token and it parses up to the end of the custom fn. For now clone but later just point to the position?",
+    "additionalNotes": null,
+    "completed": false
   }
 ]

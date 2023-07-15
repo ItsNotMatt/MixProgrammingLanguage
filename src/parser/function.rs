@@ -66,10 +66,15 @@ pub fn declaration(parser: &mut Parser) {
             let temp_vars = variable::make_temp_vars(temp_vars);
             let tokens = skip_block(parser);
             let func = data_types::CustomFunction::new(f, temp_vars, tokens);
-            parser.cache.add_custom_fn(func);
+            parser.cache.add_custom(func);
         }
         _ => panic!("Token after fn is illegal, expeceted identifier"),
     }
+}
+
+pub fn parse_custom(parser: &mut Parser, hash: u64) {
+    let func = parser.cache.get_custom_from_hash(hash);
+    todo!();
 }
 
 //need to pass var to function instead of expr like in parse fn chain

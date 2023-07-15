@@ -7,7 +7,7 @@ use super::Parser;
 pub fn make_temp_vars(vars: HashMap<String, Key>) -> HashMap<u64, TempVar> {
     let mut temps: HashMap<u64, TempVar> = HashMap::new();
     for (name, value) in vars.into_iter() {
-        println!("Making var: {:?}", name);
+        println!("\n----Making var: {:?}----\n", name);
         //have to turn string and key into a var with a default value
         let mut s = DefaultHasher::new();
         name.hash(&mut s);
@@ -80,7 +80,7 @@ fn reassign_var(parser: &mut Parser, hash: u64, expr: Expr) {
              match expr {
                  Expr::Number(n) => {
                      i.value = n;
-                     println!("Reassigning {}, to {} ", var.name, i.value);
+                     println!("\n----Reassigning {}, to {}----\n", var.name, i.value);
                  }
                  _ => panic!("Unsupported reassignment to var, cant reassign var to this type"),
              }
@@ -89,7 +89,7 @@ fn reassign_var(parser: &mut Parser, hash: u64, expr: Expr) {
             match expr {
                 Expr::Bool(bo) => {
                     *b = bo;
-                    println!("Reassigning {}, to {} ", var.name, b);
+                    println!("\n----Reassigning {}, to {}----\n", var.name, b);
                 }
                 _ => panic!("Unsupported reassignment to var, cant reassign var to this type"),
             }

@@ -60,7 +60,7 @@ impl Cache {
         self.functions.insert(func.hash, func);
     }
 
-    pub fn add_custom_fn(&mut self, func: CustomFunction) {
+    pub fn add_custom(&mut self, func: CustomFunction) {
         println!("Adding func: {}, custom. Vars: {:?}", func.name, func.variables);
         for t in &func.body {
             println!("Func body: {:?}", t);
@@ -72,9 +72,14 @@ impl Cache {
         if let Some(func) = self.functions.get_mut(&hash) {
             return func;
         }
-        else {
-            panic!("Not able to get func from hash");
+        else { panic!("Not able to get func from hash"); }
+    }
+
+    pub fn get_custom_from_hash(&mut self, hash: u64) -> &mut CustomFunction {
+        if let Some(func) = self.custom_functions.get_mut(&hash) {
+            return func;
         }
+        else { panic!("Not able to get func from hash"); }
     }
 
     //used when you want to grab a hash to a fn to pass it to multiple places
@@ -88,5 +93,18 @@ impl Cache {
             return None;
         }
     }
+
+    pub fn get_custom_hash(&mut self, name: &String) -> Option<u64> {
+        let mut s = DefaultHasher::new();
+        name.hash(&mut s);
+        if self.custom_functions.get(&s.finish()).is_some() {
+            return Some(s.finish());
+        }
+        else {
+            return None;
+        }
+    }
+
 }
+
 
