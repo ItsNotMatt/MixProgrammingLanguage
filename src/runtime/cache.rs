@@ -62,9 +62,6 @@ impl Cache {
 
     pub fn add_custom(&mut self, func: CustomFunction) {
         println!("Adding func: {}, custom. Vars: {:?}", func.name, func.variables);
-        for t in &func.body {
-            println!("Func body: {:?}", t);
-        }
         self.custom_functions.insert(func.hash, func);
     }
 

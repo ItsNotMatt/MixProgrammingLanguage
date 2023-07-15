@@ -44,6 +44,7 @@ impl Parser {
             }
         }
         return None
+
     }
 
     fn peek_token(&mut self) -> Option<&Token> {
@@ -214,6 +215,9 @@ impl Parser {
         }
         else if let Some(hash) = self.cache.get_fn_hash(&identifier) {
             function::parse_function(self, hash, None);
+        }
+        else if let Some(hash) = self.cache.get_custom_hash(&identifier) {
+            function::parse_custom(self, hash);
         }
         else {
             panic!("Cant find identifier in this context.");

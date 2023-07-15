@@ -2,7 +2,7 @@ use std::{any::Any, cell::RefCell, collections::HashMap};
 
 use crate::{lexer::Token, data_types::{Function, self}, ast::{Expr, Key}};
 
-use super::{Parser, variable, keyword::skip_block};
+use super::{Parser, variable, keyword::{skip_block, save_block}};
 
 //expr used as self for chaining. ex: input().to_int(). input() is str and passed to this fn
 pub fn parse_function(parser: &mut Parser, hash: u64, expr: Option<Expr>) -> Option<Expr> {
@@ -64,8 +64,13 @@ pub fn declaration(parser: &mut Parser) {
                 _ => panic!("Token after function name illegal, expected paren"),
             }
             let temp_vars = variable::make_temp_vars(temp_vars);
-            let tokens = skip_block(parser);
-            let func = data_types::CustomFunction::new(f, temp_vars, tokens);
+            let range = save_block(parser);
+            println!("Range is: {:?}", range);
+            let func = data_types::CustomFunction::new(f, temp_vars, range);
+            for t in func.body.start..func.body.end {
+                let tok = parser.tokens[t].clone();
+                println!("Func body: {:?}", tok);
+            }
             parser.cache.add_custom(func);
         }
         _ => panic!("Token after fn is illegal, expeceted identifier"),
@@ -74,7 +79,18 @@ pub fn declaration(parser: &mut Parser) {
 
 pub fn parse_custom(parser: &mut Parser, hash: u64) {
     let func = parser.cache.get_custom_from_hash(hash);
-    todo!();
+    //need to get args to pass into fn before going to fn
+
+    let return_position = parser.position;
+    parser.position = func.body.start;
+    parser.consume_tokens = false;
+    println!("Going to position: {}, to call function {}", parser.position, func.name.clone());
+
+    parser.parse_tokens(Some(parser.nest)); //returns to open paren rather than after fn call
+    parser.position = return_position;
+    parser.next_token().unwrap();//temporary to get rid of parens
+    parser.next_token().unwrap();
+    println!("Returning to position: {:?}", parser.tokens[parser.position].clone());
 }
 
 //need to pass var to function instead of expr like in parse fn chain

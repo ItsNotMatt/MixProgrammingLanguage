@@ -1,10 +1,7 @@
-let num = 5;
-let y = 5;
-
-while num < 7 {
-    num += 1;
-    while y < 7 {
-        y += 1;
-    } 
+fn hello(x: int) {
+    print("Hello");
 }
 
+hello();
+
+print("test");

@@ -94,5 +94,11 @@
     "title": "push vec<tokens> to front of tokens to parse_token starting from custom fn? allows you to call a custom fn and then parse_token and it parses up to the end of the custom fn. For now clone but later just point to the position?",
     "additionalNotes": null,
     "completed": false
+  },
+  {
+    "id": 17,
+    "title": "Range for custom function might not even need to be range might just need to be start position",
+    "additionalNotes": null,
+    "completed": false
   }
 ]

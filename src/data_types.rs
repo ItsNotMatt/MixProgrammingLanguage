@@ -1,5 +1,6 @@
 use std::any::Any;
 use std::collections::HashMap;
+use std::ops::Range;
 use std::{collections::hash_map::DefaultHasher, hash::Hasher};
 use std::hash::Hash;
 
@@ -99,11 +100,11 @@ pub struct CustomFunction {
     pub name: String,
     pub hash: u64,
     pub variables: HashMap<u64, TempVar>,
-    pub body: Vec<Token>,
+    pub body: Range<usize>,
 }
 
 impl CustomFunction {
-    pub fn new(identifier: String, variables: HashMap<u64, TempVar>, body: Vec<Token>) -> Self {
+    pub fn new(identifier: String, variables: HashMap<u64, TempVar>, body: Range<usize>) -> Self {
         let mut s = DefaultHasher::new();
         identifier.hash(&mut s);
         Self {
