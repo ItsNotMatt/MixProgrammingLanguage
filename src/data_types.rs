@@ -1,8 +1,10 @@
 use std::any::Any;
+use std::collections::HashMap;
 use std::{collections::hash_map::DefaultHasher, hash::Hasher};
 use std::hash::Hash;
 
-use crate::ast::Expr;
+use crate::ast::{Expr, Key};
+use crate::lexer::Token;
 use crate::parser::Parser;
 
 #[derive(Debug, PartialEq, Clone, PartialOrd)]
@@ -78,18 +80,54 @@ impl Variable {
 pub struct Function { 
     pub name: String,
     pub hash: u64,
-    pub func: Option<Box<dyn Fn(Vec<Expr>) -> Option<Expr>>>,
-    //later a list of tokens that will occur if func none aka non native
+    pub func: Box<dyn Fn(Vec<Expr>) -> Option<Expr>>,
 }
 
 impl Function {
-    pub fn new(identifier: String, func: Option<Box<dyn Fn(Vec<Expr>) -> Option<Expr>>>) -> Self {
+    pub fn new(identifier: String, func: Box<dyn Fn(Vec<Expr>) -> Option<Expr>>) -> Self {
         let mut s = DefaultHasher::new();
         identifier.hash(&mut s);
         Self {
             name: identifier,
             hash: s.finish(),
             func,
+        }
+    }
+}
+
+pub struct CustomFunction {
+    pub name: String,
+    pub hash: u64,
+    pub variables: HashMap<u64, TempVar>,
+    pub body: Vec<Token>,
+}
+
+impl CustomFunction {
+    pub fn new(identifier: String, variables: HashMap<u64, TempVar>, body: Vec<Token>) -> Self {
+        let mut s = DefaultHasher::new();
+        identifier.hash(&mut s);
+        Self {
+            name: identifier,
+            hash: s.finish(),
+            variables,
+            body,
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct TempVar {
+    pub name: String,
+    pub data_type: Option<Type>,
+    pub type_requirement: Key,
+}
+
+impl TempVar {
+    pub fn new(name: String, type_requirement: Key) -> Self {
+        Self {
+            name,
+            data_type: None,
+            type_requirement,
         }
     }
 }

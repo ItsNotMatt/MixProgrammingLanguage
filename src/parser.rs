@@ -191,12 +191,14 @@ impl Parser {
         
         match key {
             Key::Let => variable::assign_var(self, true),
-            Key::Const => variable::assign_var(self, false),
             Key::If =>  keyword::parse_if(self),
             Key::While => keyword::parse_while(self, None),
-            Key::Else => keyword::skip_block(self), 
+            Key::Else => {
+                let _ = keyword::skip_block(self);
+            } 
+            Key::Const => variable::assign_var(self, false),
+            Key::Fn => function::declaration(self),
             _ => panic!("Unsupported key word"),
-            
         }
     }
 

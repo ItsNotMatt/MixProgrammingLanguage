@@ -1,10 +1,11 @@
 use std::{collections::{HashMap, hash_map::DefaultHasher}, hash::{Hash, Hasher}};
 
-use crate::data_types::{Variable, Function};
+use crate::data_types::{Variable, Function, CustomFunction};
 
 pub struct Cache {
     variables: HashMap<u64, Variable>,
     functions: HashMap<u64, Function>,
+    custom_functions: HashMap<u64, CustomFunction>,
 }
 
 impl Cache {
@@ -12,6 +13,7 @@ impl Cache {
         Self {
             variables: HashMap::new(),
             functions: HashMap::new(),
+            custom_functions: HashMap::new(),
         }
     }
 
@@ -53,10 +55,17 @@ impl Cache {
     }
 
 
-
+    //functions
     pub fn add_fn(&mut self, func: Function) {
-        println!("Adding func, native: {}", func.func.is_some());
         self.functions.insert(func.hash, func);
+    }
+
+    pub fn add_custom_fn(&mut self, func: CustomFunction) {
+        println!("Adding func: {}, custom. Vars: {:?}", func.name, func.variables);
+        for t in &func.body {
+            println!("Func body: {:?}", t);
+        }
+        self.custom_functions.insert(func.hash, func);
     }
 
     pub fn get_fn_from_hash(&mut self, hash: u64) -> &mut Function {

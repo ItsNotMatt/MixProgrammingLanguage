@@ -3,6 +3,8 @@
 use std::{fs::File, io::Read};
 use std::env;
 
+use cli::CLI;
+
 mod lexer;
 mod ast;
 mod parser;
@@ -11,18 +13,18 @@ mod evaluator;
 mod runtime;
 mod data_types;
 mod core;
+mod cli;
 
 fn main() {
     //read from file
     let dir = std::env::current_dir().unwrap();
-    let file_path = dir.join("src/mix.mx");
+    let file_path = dir.join("src/main.mx");
     let mut file = File::open(file_path).unwrap();
     let mut contents = String::new();
     file.read_to_string(&mut contents).unwrap();
 
     //get args  arg should be -- -t     -t to just tokenize, no args means run code
-    let args: Vec<String> = env::args().collect();
-    if args.len() > 1 && args[1] == "-t" {
+    if cli::get_args() == CLI::Tokenize {
         println!("Just tokenizing");
         let tokens = tokenize(contents);
         for token in tokens {

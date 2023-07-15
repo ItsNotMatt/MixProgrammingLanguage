@@ -46,10 +46,13 @@ pub struct BinExpr {
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
 pub enum Key {
     For,
+    Fn,
     Let,
     While,
     If,
     Else,
+    Int,
+    String,
     True,
     False,
     Break,

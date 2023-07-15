@@ -7,23 +7,22 @@ mod types;
 
 pub fn import_default_functions(cache: &mut Cache) {
     let func = data_types::Function::new("print".to_string(),
-        Some(Box::new(io::print as fn(Vec<Expr>) -> Option<Expr>)));
+        Box::new(io::print as fn(Vec<Expr>) -> Option<Expr>));
     cache.add_fn(func);
     let func = data_types::Function::new("input".to_string(),
-        Some(Box::new(io::input as fn(Vec<Expr>) -> Option<Expr>)));
+        Box::new(io::input as fn(Vec<Expr>) -> Option<Expr>));
     cache.add_fn(func);
 
     let func = data_types::Function::new("to_int".to_string(),
-        Some(Box::new(types::to_int as fn(Vec<Expr>) -> Option<Expr>)));
+        Box::new(types::to_int as fn(Vec<Expr>) -> Option<Expr>));
     cache.add_fn(func);   
-
     let func = data_types::Function::new("to_string".to_string(),
-        Some(Box::new(types::to_string as fn(Vec<Expr>) -> Option<Expr>)));
+        Box::new(types::to_string as fn(Vec<Expr>) -> Option<Expr>));
     cache.add_fn(func);
 
 
     let func = data_types::Function::new("test".to_string(),
-        Some(Box::new(test as fn(Vec<Expr>) -> Option<Expr>)));
+        Box::new(test as fn(Vec<Expr>) -> Option<Expr>));
     cache.add_fn(func);
 }
 

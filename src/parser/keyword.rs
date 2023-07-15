@@ -27,8 +27,9 @@ pub fn parse_block(parser: &mut Parser) {
     parser.parse_tokens(Some(parser.nest));//so parse_tokens knows when it hits end of block
 }
 
-pub fn skip_block(parser: &mut Parser) {
+pub fn skip_block(parser: &mut Parser) -> Vec<Token> {
     let mut nest: Option<usize> = None;
+    let mut tokens: Vec<Token> = Vec::new();
     while let Some(token) = parser.next_token() {
         match token {
             Token::OCurly => {
@@ -45,6 +46,7 @@ pub fn skip_block(parser: &mut Parser) {
                 else { println!("Skipping token: {:?}", token); }
             }
         }
+        tokens.push(token);
         if nest == Some(0) {
             println!("----Skipped block----\n");
             break;
@@ -55,6 +57,7 @@ pub fn skip_block(parser: &mut Parser) {
         parser.next_token().unwrap(); 
         parse_block(parser);
     }
+    return tokens;
 }
 
 pub fn parse_while(parser: &mut Parser, expr: Option<Expr>) {//need to start copying at expression not at Ocurly

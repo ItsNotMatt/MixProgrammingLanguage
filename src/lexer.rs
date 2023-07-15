@@ -25,6 +25,7 @@ pub enum Token {
     CCurly,
     Comma,
     Semi,
+    Colon,
     Eof,
 }
 
@@ -49,11 +50,20 @@ impl Lexer {
             "else" => {
                 return Some(Token::Keyword(Key::Else));
             }
+            "fn" => {
+                return Some(Token::Keyword(Key::Fn));
+            }
             "for" => {
                 return Some(Token::Keyword(Key::For));
             }
             "while" => {
                 return Some(Token::Keyword(Key::While));
+            }
+            "int" => {
+                return Some(Token::Keyword(Key::Int));
+            }
+            "string" => {
+                return Some(Token::Keyword(Key::String));
             }
             "true" => {
                 return Some(Token::Keyword(Key::True));
@@ -180,6 +190,9 @@ impl Lexer {
                 }
                 '}' => {
                     tokens.push(Token::CCurly);
+                }
+                ':' => {
+                    tokens.push(Token::Colon);
                 }
                 '"' => { 
                     tokens.push(self.read_string());
