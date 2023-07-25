@@ -33,13 +33,13 @@ impl Parser {
     fn next_token(&mut self) -> Option<Token> {
         if self.tokens.len() > 0 {
             if self.consume_tokens {
-                //println!("--Consuming Token: {:?}", self.tokens[self.position].clone());
+//                println!("--Consuming Token: {:?}", self.tokens[self.position].clone());
                 return Some(self.tokens.remove(self.position));
             }
             else {
                 let token = self.tokens[self.position].clone();
                 self.position += 1;
-                //println!("--Copying token: {:?}, position: {}", token, self.position);
+//                println!("--Copying token: {:?}, position: {}", token, self.position);
                 return Some(token);
             }
         }
@@ -50,11 +50,11 @@ impl Parser {
     fn peek_token(&mut self) -> Option<&Token> {
         if self.tokens.len() > 0 {
             if self.consume_tokens {
-                //println!("--Peeking at Token: {:?}", &self.tokens[0]);
-                return Some(&self.tokens[0]);
+//                println!("--Peeking at Token: {:?}", &self.tokens[self.position]);
+                return Some(&self.tokens[self.position]);
             }
             else {
-                //println!("--Peeking at Token: {:?}, position: {}", &self.tokens[self.position], self.position);
+//                println!("--Peeking at Token: {:?}, position: {}", &self.tokens[self.position], self.position);
                 return Some(&self.tokens[self.position]);
             }
         }
@@ -134,6 +134,7 @@ impl Parser {
     }
 
     fn parse_expr(&mut self) -> Result<Expr, ParseError> {
+        self.peek_token().unwrap();
         let token = self.next_token().unwrap();
         println!("Matching on {:?}, Position: {}", token, self.position);
 
@@ -165,6 +166,7 @@ impl Parser {
     }
 
     fn get_expr(&mut self) -> Expr { //used when you want to check if expr ends or create a new exp
+        println!("Trying to get expr");
         let exp = self.parse_expr().unwrap();
         
         if self.parse_next_expression() {
@@ -203,7 +205,7 @@ impl Parser {
                 let _ = keyword::skip_block(self);
             } 
             Key::Const => variable::assign_var(self, false),
-            Key::Fn => function::declaration(self),
+            Key::Fn => function::declare_custom(self),
             _ => panic!("Unsupported key word"),
         }
     }
@@ -214,10 +216,10 @@ impl Parser {
             variable::edit_var(self, hash);
         }
         else if let Some(hash) = self.cache.get_fn_hash(&identifier) {
-            function::parse_function(self, hash, None);
+            function::parse_function(self, hash, None, true);
         }
         else if let Some(hash) = self.cache.get_custom_hash(&identifier) {
-            function::parse_custom(self, hash);
+            function::parse_function(self, hash, None, false);
         }
         else {
             panic!("Cant find identifier in this context.");
@@ -239,8 +241,10 @@ impl Parser {
                 return var.to_expression();
             }
         }
+        //later have to make it so this will be able to know whether to call parse as custom or as
+        //native
         else if let Some(hash) = self.cache.get_fn_hash(&identifier) {
-            let mut expr = function::parse_function(self, hash, None).unwrap();
+            let mut expr = function::parse_function(self, hash, None, false).unwrap();
             if self.peek_token().unwrap()  == &Token::Dot {
                 self.next_token().unwrap(); //to get rid of dot
                 expr = function::parse_fn_chain(self, expr);
