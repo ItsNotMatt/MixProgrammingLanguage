@@ -1,6 +1,6 @@
 use std::{collections::{HashMap, hash_map::DefaultHasher}, hash::{Hash, Hasher}};
 
-use crate::{lexer::Token, ast::{Expr, ArithmeticOperator, Operator, BinExpr, Key}, data_types::{Type, Variable, TempVar, self}, parser::variable, runtime, evaluator::eval_bin_expr};
+use crate::{lexer::Token, ast::{Expr, ArithmeticOperator, Operator, BinExpr, Key}, data_types::{Type, Variable, TempVar, self}, parser::variable, runtime, evaluator::eval_bin_expr, lib};
 
 use super::Parser;
 
@@ -9,16 +9,18 @@ pub fn make_temp_vars(vars: HashMap<String, Key>) -> HashMap<u64, TempVar> {
     for (name, value) in vars.into_iter() {
         println!("\n----Making var: {:?}----\n", name);
         //have to turn string and key into a var with a default value
-        let mut s = DefaultHasher::new();
-        name.hash(&mut s);
-        let hash = s.finish();
-
+        let hash = lib::get_hash(&name);
+        
         match value {
             Key::Int => {
                 let var = data_types::TempVar::new(name, value);
                 temps.insert(hash, var);
             }
             Key::String => {
+                let var = data_types::TempVar::new(name, value);
+                temps.insert(hash, var);
+            }
+            Key::Bool => {
                 let var = data_types::TempVar::new(name, value);
                 temps.insert(hash, var);
             }

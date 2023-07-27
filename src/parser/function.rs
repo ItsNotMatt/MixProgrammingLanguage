@@ -78,7 +78,25 @@ fn parse_args(parser: &mut Parser, hash: u64, mut args: Vec<Expr>) {
                             value.data_type = Some(Type::Int(n));
                             vars.push(value.convert_to_var());
                         } 
-                        _ => panic!("Invalid arg type"),
+                        _ => panic!("Invalid arg type, expected int"),
+                    }
+                }
+                Key::String => {
+                    match arg {
+                        Expr::String(s) => {
+                            value.data_type = Some(Type::String(s));
+                            vars.push(value.convert_to_var());
+                        } 
+                        _ => panic!("Invalid arg type, expected string"),
+                    }
+                }
+                Key::Bool => {
+                    match arg {
+                        Expr::Bool(b) => {
+                            value.data_type = Some(Type::Bool(b));
+                            vars.push(value.convert_to_var());
+                        } 
+                        _ => panic!("Invalid arg type, expected bool"),
                     }
                 }
                 _ => panic!("Key cant be a type requirement"),

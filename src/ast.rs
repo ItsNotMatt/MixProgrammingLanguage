@@ -53,6 +53,7 @@ pub enum Key {
     Else,
     Int,
     String,
+    Bool,
     True,
     False,
     Break,

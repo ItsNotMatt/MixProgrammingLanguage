@@ -65,6 +65,9 @@ impl Lexer {
             "string" => {
                 return Some(Token::Keyword(Key::String));
             }
+            "bool" => {
+                return Some(Token::Keyword(Key::Bool));
+            }
             "true" => {
                 return Some(Token::Keyword(Key::True));
             }           

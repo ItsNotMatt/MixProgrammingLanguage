@@ -1,7 +1,7 @@
-fn hello(x: int) {
+fn hello(x: bool) {
     print("Value: ", x);
 }
 
-hello(10);
+hello(true);
 
 
