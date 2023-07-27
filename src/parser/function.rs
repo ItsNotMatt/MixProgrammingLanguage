@@ -1,6 +1,6 @@
-use std::{any::Any, cell::RefCell, collections::HashMap};
+use std::{any::Any, cell::RefCell, collections::HashMap, thread::panicking};
 
-use crate::{lexer::Token, data_types::{Function, self}, ast::{Expr, Key}};
+use crate::{lexer::Token, data_types::{Function, self, Type, CustomFunction, Variable}, ast::{Expr, Key}};
 
 use super::{Parser, variable, keyword::{skip_block, save_block}};
 
@@ -42,8 +42,10 @@ fn call_native(parser: &mut Parser, hash: u64, args: Vec<Expr>) -> Option<Expr> 
 }
 
 fn call_custom(parser: &mut Parser, hash: u64, args: Vec<Expr>) -> Option<Expr> {
+    //check args
+    parse_args(parser, hash, args);
     let func = parser.cache.get_custom_from_hash(hash);
-
+    
     let return_position = parser.position;
     parser.position = func.body.start;
     parser.consume_tokens = false;
@@ -54,6 +56,38 @@ fn call_custom(parser: &mut Parser, hash: u64, args: Vec<Expr>) -> Option<Expr> 
     println!("Returning to position: {:?}", parser.tokens[parser.position].clone());
 
     None
+}
+
+fn parse_args(parser: &mut Parser, hash: u64, mut args: Vec<Expr>) {
+    let func = parser.cache.get_custom_from_hash(hash);
+    let mut vars: Vec<Variable> = Vec::new();
+
+    if args.len() != func.variables.len() {
+        panic!("Function takes {} args but {} were passed in", args.len(), func.variables.len());
+    } 
+    else {
+        //need to match arg type to temp var type and then create a var or set temp var datatype to
+        //expr to be used in func
+        for (_, value) in &mut func.variables {
+            let arg = args.remove(0);
+            match value.type_requirement  {
+                Key::Int => {
+                    match arg {
+                        Expr::Number(n) => {
+                            value.data_type = Some(Type::Int(n));
+                            vars.push(value.convert_to_var());
+                        } 
+                        _ => panic!("Invalid arg type"),
+                    }
+                }
+                _ => panic!("Key cant be a type requirement"),
+            };
+        }
+    }
+    for var in vars {
+        parser.cache.add_var(var);
+    }
+
 }
 
 pub fn declare_custom(parser: &mut Parser) {

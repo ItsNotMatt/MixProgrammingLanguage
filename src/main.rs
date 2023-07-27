@@ -14,6 +14,7 @@ mod runtime;
 mod data_types;
 mod core;
 mod cli;
+mod lib;
 
 fn main() {
     //read from file

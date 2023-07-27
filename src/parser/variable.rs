@@ -1,6 +1,6 @@
 use std::{collections::{HashMap, hash_map::DefaultHasher}, hash::{Hash, Hasher}};
 
-use crate::{lexer::Token, ast::{Expr, ArithmeticOperator, Operator, BinExpr, Key}, data_types::{Type, IntType, Variable, StringType, TempVar, self}, parser::variable, runtime, evaluator::eval_bin_expr};
+use crate::{lexer::Token, ast::{Expr, ArithmeticOperator, Operator, BinExpr, Key}, data_types::{Type, Variable, TempVar, self}, parser::variable, runtime, evaluator::eval_bin_expr};
 
 use super::Parser;
 
@@ -31,10 +31,10 @@ pub fn make_temp_vars(vars: HashMap<String, Key>) -> HashMap<u64, TempVar> {
 fn create_var(parser: &mut Parser, identifier: String, expr: Expr, mutable: bool) {
     let data_type: Type = match expr {
             Expr::Number(n) => {
-                Type::Int(IntType { value: n })
+                Type::Int(n)
             }
             Expr::String(s) => {
-                Type::String(StringType { value: s })
+                Type::String(s)
             }
             Expr::Bool(b) => {
                 Type::Bool(b)
@@ -79,8 +79,8 @@ fn reassign_var(parser: &mut Parser, hash: u64, expr: Expr) {
         Type::Int(i) => {
              match expr {
                  Expr::Number(n) => {
-                     i.value = n;
-                     println!("\n----Reassigning {}, to {}----\n", var.name, i.value);
+                     *i = n;
+                     println!("\n----Reassigning {}, to {}----\n", var.name, i);
                  }
                  _ => panic!("Unsupported reassignment to var, cant reassign var to this type"),
              }
@@ -97,7 +97,7 @@ fn reassign_var(parser: &mut Parser, hash: u64, expr: Expr) {
         Type::String(s) => {
             match expr {
                 Expr::String(str) => {
-                    s.value = str;
+                    *s = str;
                 }
                 _ => panic!("Unsupported reassignment to var, cant reassign var to this type"),
             }

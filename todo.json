@@ -100,5 +100,11 @@
     "title": "Range for custom function might not even need to be range might just need to be start position",
     "additionalNotes": null,
     "completed": false
+  },
+  {
+    "id": 18,
+    "title": "Add temp vars made by function into variable list and then remove when fn exited. this will cause issues if the names are the same as global vars tho",
+    "additionalNotes": null,
+    "completed": false
   }
 ]

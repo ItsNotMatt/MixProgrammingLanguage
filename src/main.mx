@@ -1,6 +1,7 @@
 fn hello(x: int) {
-    print("Hello");
+    print("Value: ", x);
 }
 
-hello();
+hello(10);
+
 
