@@ -106,5 +106,17 @@
     "title": "Add temp vars made by function into variable list and then remove when fn exited. this will cause issues if the names are the same as global vars tho",
     "additionalNotes": null,
     "completed": false
+  },
+  {
+    "id": 19,
+    "title": "House cleaning: Process of removing and adding temp fn vars to vars is repetitive and dirty",
+    "additionalNotes": null,
+    "completed": false
+  },
+  {
+    "id": 20,
+    "title": "House cleaning: Change all instances of hashing to use lib::hash instead",
+    "additionalNotes": null,
+    "completed": false
   }
 ]

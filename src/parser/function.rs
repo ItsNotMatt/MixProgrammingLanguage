@@ -53,6 +53,7 @@ fn call_custom(parser: &mut Parser, hash: u64, args: Vec<Expr>) -> Option<Expr> 
     parser.parse_tokens(Some(parser.nest)); //returns to open paren rather than after fn call
 
     parser.position = return_position;
+    remove_temp_vars(parser, hash);
     println!("Returning to position: {:?}", parser.tokens[parser.position].clone());
 
     None
@@ -88,6 +89,15 @@ fn parse_args(parser: &mut Parser, hash: u64, mut args: Vec<Expr>) {
         parser.cache.add_var(var);
     }
 
+}
+
+fn remove_temp_vars(parser: &mut Parser, hash: u64) {
+    let func = parser.cache.get_custom_from_hash(hash);
+    let mut vars: Vec<u64> = Vec::new();
+    for hash in func.variables.keys() {
+        vars.push(*hash);
+    }
+    parser.cache.remove_temps(vars);
 }
 
 pub fn declare_custom(parser: &mut Parser) {

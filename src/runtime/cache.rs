@@ -22,6 +22,18 @@ impl Cache {
         self.variables.insert(var.hash, var);
     }
 
+    pub fn remove_temps(&mut self, hashs: Vec<u64>) {
+        let mut temp_vars: Vec<u64> = Vec::new();
+        for hash in hashs {
+            if self.variables.contains_key(&hash) {
+                temp_vars.push(hash);
+            }
+        }
+        for hash in temp_vars {
+            self.variables.remove(&hash);
+        }
+    }
+
     pub fn get_var_from_string(&mut self, name: &String) -> Option<&mut Variable> {
         let mut s = DefaultHasher::new();
         name.hash(&mut s);
