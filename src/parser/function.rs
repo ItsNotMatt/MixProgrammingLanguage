@@ -50,13 +50,22 @@ fn call_custom(parser: &mut Parser, hash: u64, args: Vec<Expr>) -> Option<Expr> 
     parser.position = func.body.start;
     parser.consume_tokens = false;
     println!("Going to position: {}, From position: {}, to call function {}", parser.position, return_position, func.name.clone());
-    parser.parse_tokens(Some(parser.nest)); //returns to open paren rather than after fn call
+    let return_val = parser.parse_tokens(Some(parser.nest));
+    let func = parser.cache.get_custom_from_hash(hash);
+    //if return val != the key return_val expected then error
+    match (&return_val, &func.return_val) {
+        (None, None) => {}
+        (Some(Expr::Number(n)), Some(Key::Int)) => { println!("Returning value: {}", n)}
+        (Some(Expr::String(s)), Some(Key::String)) => { println!("Returning value: {}", s)}
+        (Some(Expr::Bool(b)), Some(Key::Bool)) => { println!("Returning value: {}", b)}
+        _ => panic!("Return value doesnt match expected return value")
+    }
 
     parser.position = return_position;
     remove_temp_vars(parser, hash);
     println!("Returning to position: {:?}", parser.tokens[parser.position].clone());
 
-    None
+    return_val 
 }
 
 fn parse_args(parser: &mut Parser, hash: u64, mut args: Vec<Expr>) {
@@ -144,13 +153,18 @@ pub fn declare_custom(parser: &mut Parser) {
                 _ => panic!("Token after function name illegal, expected paren"),
             }
             let temp_vars = variable::make_temp_vars(temp_vars);
+            let mut return_val = None;
+            if parser.peek_token().unwrap()  == &Token::Colon {
+                parser.next_token().unwrap();
+                if let Token::Keyword(key) = parser.next_token().unwrap() {
+                    return_val = Some(key);
+                }
+            }
             let range = save_block(parser);
             println!("Range is: {:?}", range);
-            let func = data_types::CustomFunction::new(f, temp_vars, range);
-            for t in func.body.start..func.body.end {
-                let tok = parser.tokens[t].clone();
-                println!("Func body: {:?}", tok);
-            }
+            //have to check for return value first
+            
+            let func = data_types::CustomFunction::new(f, temp_vars, range, return_val);
             parser.cache.add_custom(func);
         }
         _ => panic!("Token after fn is illegal, expeceted identifier"),
@@ -179,6 +193,7 @@ pub fn parse_fn_chain(parser: &mut Parser, mut expr: Expr) -> Expr {
 }
 
 //expr is prev functions expression return value
+//not set up for custom funcs yet
 fn next_fn(parser: &mut Parser, name: &String, expr: Expr) -> Expr {
     if let Some(hash) = parser.cache.get_fn_hash(name) {
         return parse_function(parser, hash, Some(expr), false).unwrap();

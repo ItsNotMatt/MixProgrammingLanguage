@@ -118,5 +118,17 @@
     "title": "House cleaning: Change all instances of hashing to use lib::hash instead",
     "additionalNotes": null,
     "completed": false
+  },
+  {
+    "id": 21,
+    "title": "cant use same names in arguments and parameters need to fix",
+    "additionalNotes": null,
+    "completed": false
+  },
+  {
+    "id": 22,
+    "title": "custom funcs cant chain currently",
+    "additionalNotes": null,
+    "completed": false
   }
 ]

@@ -54,10 +54,11 @@ pub enum Key {
     Int,
     String,
     Bool,
+    Const,
     True,
     False,
+    Return,
     Break,
-    Const,
 }
 
 #[derive(Debug, Clone, PartialEq, PartialOrd)]

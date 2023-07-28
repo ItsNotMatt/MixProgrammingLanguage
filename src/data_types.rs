@@ -90,10 +90,11 @@ pub struct CustomFunction {
     pub hash: u64,
     pub variables: HashMap<u64, TempVar>,
     pub body: Range<usize>,
+    pub return_val: Option<Key>
 }
 
 impl CustomFunction {
-    pub fn new(identifier: String, variables: HashMap<u64, TempVar>, body: Range<usize>) -> Self {
+    pub fn new(identifier: String, variables: HashMap<u64, TempVar>, body: Range<usize>, return_val: Option<Key>) -> Self {
         let mut s = DefaultHasher::new();
         identifier.hash(&mut s);
         Self {
@@ -101,6 +102,7 @@ impl CustomFunction {
             hash: s.finish(),
             variables,
             body,
+            return_val,
         }
     }
 }

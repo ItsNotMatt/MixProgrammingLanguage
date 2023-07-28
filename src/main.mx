@@ -1,7 +1,6 @@
-fn hello(x: bool) {
-    print("Value: ", x);
+fn hello() : int {
+    return 10;
 }
-
-hello(true);
-
+let x = hello();
+print("x is: ", x);
 

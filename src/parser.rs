@@ -71,6 +71,7 @@ impl Parser {
                 Token::Keyword(k) => {
                     match k {
                         Key::Break => return Some(Expr::Bool(false)),
+                        Key::Return => return self.parse_return(),
                         _ => self.parse_keyword(&k),
                     }
                 }
@@ -134,7 +135,6 @@ impl Parser {
     }
 
     fn parse_expr(&mut self) -> Result<Expr, ParseError> {
-        self.peek_token().unwrap();
         let token = self.next_token().unwrap();
         println!("Matching on {:?}, Position: {}", token, self.position);
 
@@ -210,6 +210,14 @@ impl Parser {
         }
     }
 
+    fn parse_return(&mut self) -> Option<Expr> {
+        if self.peek_token().unwrap() != &Token::Semi {
+            let expr = self.get_expr();
+            return Some(expr);
+        }
+        None
+    }
+
     //fn doesnt have return value, naked call aka print("test");
     fn parse_identifier(&mut self, identifier: String) {
         if let Some(hash) = self.cache.get_var_hash(&identifier) {
@@ -241,14 +249,18 @@ impl Parser {
                 return var.to_expression();
             }
         }
-        //later have to make it so this will be able to know whether to call parse as custom or as
+        //have to make it so this will be able to know whether to call parse as custom or as
         //native
         else if let Some(hash) = self.cache.get_fn_hash(&identifier) {
-            let mut expr = function::parse_function(self, hash, None, false).unwrap();
+            let mut expr = function::parse_function(self, hash, None, true).unwrap();
             if self.peek_token().unwrap()  == &Token::Dot {
                 self.next_token().unwrap(); //to get rid of dot
                 expr = function::parse_fn_chain(self, expr);
             }
+            return expr; 
+        }
+        else if let Some(hash) = self.cache.get_custom_hash(&identifier) {
+            let expr = function::parse_function(self, hash, None, false).unwrap();
             return expr; 
         }
         else {
