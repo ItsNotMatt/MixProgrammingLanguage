@@ -1,6 +1,11 @@
-fn hello() : int {
-    return 10;
+fn get_name() : string {
+    let in = input("Give me your name");
+    if in != "matt" {
+        panic("Not the correct name!");
+    }
+    return in;
 }
-let x = hello();
-print("x is: ", x);
 
+let name = get_name();
+
+print("name is: ", name);

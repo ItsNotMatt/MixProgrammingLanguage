@@ -1,9 +1,10 @@
 use std::any::Any;
 
-use crate::{data_types, runtime::cache::Cache, ast::Expr, parser::Parser};
+use crate::{data_types, runtime::cache::Cache, ast::Expr};
 
 mod io;
 mod types;
+mod error;
 
 pub fn import_default_functions(cache: &mut Cache) {
     let func = data_types::Function::new("print".to_string(),
@@ -18,6 +19,10 @@ pub fn import_default_functions(cache: &mut Cache) {
     cache.add_fn(func);   
     let func = data_types::Function::new("to_string".to_string(),
         Box::new(types::to_string as fn(Vec<Expr>) -> Option<Expr>));
+    cache.add_fn(func);
+
+    let func = data_types::Function::new("panic".to_string(),
+        Box::new(error::panic as fn(Vec<Expr>) -> Option<Expr>));
     cache.add_fn(func);
 
 
