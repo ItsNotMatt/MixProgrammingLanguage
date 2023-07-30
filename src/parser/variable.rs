@@ -41,6 +41,9 @@ fn create_var(parser: &mut Parser, identifier: String, expr: Expr, mutable: bool
             Expr::Bool(b) => {
                 Type::Bool(b)
             }
+            Expr::Array(a) => {
+                Type::Array(a)
+            }
             _ => {
                 panic!("Unable to create var of this type");
             }

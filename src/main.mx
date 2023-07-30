@@ -1,11 +1,6 @@
-fn get_name() : string {
-    let in = input("Give me your name");
-    if in != "matt" {
-        panic("Not the correct name!");
-    }
-    return in;
-}
+import core;
 
-let name = get_name();
+let x = [10, 20, 30];
 
-print("name is: ", name);
+print("x is: ", x[2]);
+

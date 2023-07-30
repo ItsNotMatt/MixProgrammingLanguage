@@ -17,17 +17,19 @@ pub enum Expr {
     Identifier(String), 
     Operator(Operator),
     BinExpr(BinExpr),
+    Array(Box<Vec<Expr>>),
 }
 
 impl fmt::Display for Expr {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Expr::Number(n) => write!(f, "{}", n),
+            Expr::Bool(b) => write!(f, "{{{}}}", b),
             Expr::String(s) => write!(f, "{}", s),
             Expr::Identifier(s) => write!(f, "{{{:?}}}", s),
             Expr::Operator(o) => write!(f, "{}", o),
             Expr::BinExpr(e) => write!(f, " [{} {} {}]", e.left, e.op, e.right), 
-            Expr::Bool(b) => write!(f, "{{{}}}", b),
+            Expr::Array(a) => write!(f, "{{{:?}}}", a),
         }
     }
 }
@@ -59,6 +61,8 @@ pub enum Key {
     False,
     Return,
     Break,
+    Thread,
+    Import,
 }
 
 #[derive(Debug, Clone, PartialEq, PartialOrd)]

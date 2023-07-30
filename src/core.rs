@@ -1,12 +1,20 @@
-use std::any::Any;
-
 use crate::{data_types, runtime::cache::Cache, ast::Expr};
 
 mod io;
 mod types;
 mod error;
+mod math;
 
-pub fn import_default_functions(cache: &mut Cache) {
+pub fn import_module(module: &str, cache: &mut Cache) {
+    println!("Trying to import module: {}", module);
+    match module {
+        "core" => import_default_functions(cache),
+        "math" => math::import_math(cache),
+        _ => panic!("Cant find module"),
+    }
+}
+
+fn import_default_functions(cache: &mut Cache) {
     let func = data_types::Function::new("print".to_string(),
         Box::new(io::print as fn(Vec<Expr>) -> Option<Expr>));
     cache.add_fn(func);

@@ -26,6 +26,7 @@ pub enum Token {
     Comma,
     Semi,
     Colon,
+    DoubleColon,
     Eof,
 }
 
@@ -80,8 +81,14 @@ impl Lexer {
             "return" => {
                 return Some(Token::Keyword(Key::Return));
             }
+            "import" => {
+                return Some(Token::Keyword(Key::Import));
+            }
             "break" => {
                 return Some(Token::Keyword(Key::Break));
+            }
+            "thread" => {
+                return Some(Token::Keyword(Key::Thread));
             }
             _ => {
                 return None;
@@ -191,6 +198,12 @@ impl Lexer {
                 ')' => {
                     tokens.push(Token::CParen);
                 }
+                '[' => {
+                    tokens.push(Token::OBracket);
+                }
+                ']' => {
+                    tokens.push(Token::CBracket);
+                }
                 '{' => {
                     tokens.push(Token::OCurly);
                 }
@@ -198,7 +211,10 @@ impl Lexer {
                     tokens.push(Token::CCurly);
                 }
                 ':' => {
-                    tokens.push(Token::Colon);
+                    if self.check_ahead(':') {
+                        tokens.push(Token::DoubleColon);
+                    }
+                    else { tokens.push(Token::Colon); }
                 }
                 '"' => { 
                     tokens.push(self.read_string());

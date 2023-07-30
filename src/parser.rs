@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 #![allow(unused_imports)]
 
-use crate::{lexer::Token, ast::{Expr, BinExpr, Operator, Key, Identifier}, error::ParseError, evaluator::eval_bin_expr, runtime::cache::Cache, lib};
+use crate::{lexer::Token, ast::{Expr, BinExpr, Operator, Key, Identifier}, error::ParseError, evaluator::eval_bin_expr, runtime::cache::Cache, lib, core, parser, data_types};
 
 mod variable;
 mod function;
@@ -152,6 +152,7 @@ impl Parser {
                 return Ok(self.get_expr_from_identifier(s));
             }
             Token::Operator(op) => return Ok(Expr::Operator(op)),
+            Token::OBracket => Ok(self.parse_array()),
             Token::OParen => {
                 self.parse_bin_expr(None);
                 return Ok(self.expression.clone().unwrap());
@@ -204,19 +205,23 @@ impl Parser {
             Key::Else => {
                 let _ = keyword::skip_block(self);
             } 
-            Key::Const => variable::assign_var(self, false),
             Key::Fn => function::declare_custom(self),
+            Key::Import => self.parse_import(),
+            Key::Const => variable::assign_var(self, false),
             _ => panic!("Unsupported key word"),
         }
     }
 
-    fn parse_return(&mut self) -> Option<Expr> {
-        if self.peek_token().unwrap() != &Token::Semi {
-            let expr = self.get_expr();
-            return Some(expr);
-        }
-        None
-    }
+//    fn parse_thread(&mut self) {
+//        let token = self.next_token().unwrap();
+//        match token {
+//            Token::Identifier(s) => { 
+//                self.parse_identifier(s);
+//            }
+//            Token::OBracket => println!("Parsing block in a new thread"),
+//            _ => panic!("Invalid token after thread keyword."),
+//        }
+//    }
 
     //fn doesnt have return value, naked call aka print("test");
     fn parse_identifier(&mut self, identifier: String) {
@@ -245,8 +250,22 @@ impl Parser {
                 return expr;
             }
             else {
+                let mut index: Option<usize> = None;
+                if self.peek_token().unwrap() == &Token::OBracket {
+                    self.next_token().unwrap();
+                    match self.next_token().unwrap() {
+                        Token::Number(n) => index = Some(n as usize),
+                        _ => panic!("Invalid token after ["),
+                    }
+                    self.next_token().unwrap();//gets rid of ]
+                }
                 let var = self.cache.get_var_from_hash(hash);
-                return var.to_expression();
+                if let Some(i) = index {
+                    return var.index_to_expression(i);
+                }
+                else {
+                    return var.to_expression();
+                }
             }
         }
         //have to make it so this will be able to know whether to call parse as custom or as
@@ -266,6 +285,46 @@ impl Parser {
         else {
             panic!("Cant find identifier in this context.");
         }
+    }
+
+    fn parse_return(&mut self) -> Option<Expr> {
+        if self.peek_token().unwrap() != &Token::Semi {
+            let expr = self.get_expr();
+            return Some(expr);
+        }
+        None
+    }
+
+    fn parse_import(&mut self) {
+        let mut module = String::new();
+        loop {
+            match self.next_token().unwrap() {
+                Token::Identifier(s) => module = s,
+                Token::DoubleColon => continue,
+                Token::Semi => break,
+                _ => panic!("Invalid token after import"),
+            }
+        }
+        core::import_module(&module, &mut self.cache);
+    }
+
+    fn parse_array(&mut self) -> Expr {
+        println!("Parsing array");
+        let mut exprs: Vec<Expr> = Vec::new();
+        loop {
+            match self.peek_token().unwrap() {
+                &Token::Comma => {
+                    self.next_token().unwrap();
+                    continue;
+                }
+                &Token::CBracket => {
+                    self.next_token().unwrap();
+                    break;
+                } 
+                _ => exprs.push(self.get_expr()),
+            };
+        }
+        Expr::Array(Box::new(exprs))
     }
 
 }

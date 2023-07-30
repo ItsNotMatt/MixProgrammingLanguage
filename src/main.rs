@@ -1,7 +1,5 @@
 #![allow(dead_code)]
-
 use std::{fs::File, io::Read};
-use std::env;
 
 use cli::CLI;
 
@@ -37,8 +35,7 @@ fn main() {
     let tokens = tokenize(contents);
 
     //create cache and import io into cache
-    let mut cache = runtime::cache::Cache::new();
-    core::import_default_functions(&mut cache);
+    let cache = runtime::cache::Cache::new();
 
     //create parser and give values to cache from parser
     let mut parser = parser::Parser::new(tokens, cache);

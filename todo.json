@@ -118,5 +118,23 @@
     "title": "custom funcs cant chain currently",
     "additionalNotes": null,
     "completed": false
+  },
+  {
+    "id": 21,
+    "title": "Maybe switch to system using expr/statement rules? Ex: Var: operator, expr, semi. And it has to follow that order? Might be traditional way?",
+    "additionalNotes": null,
+    "completed": false
+  },
+  {
+    "id": 22,
+    "title": "need to add proper nest checking when importing incase diff modules have the same name",
+    "additionalNotes": null,
+    "completed": false
+  },
+  {
+    "id": 23,
+    "title": "Later make helper functions to first check if len is proper by just passing in the proper # of args",
+    "additionalNotes": null,
+    "completed": false
   }
 ]

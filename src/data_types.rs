@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use std::env::VarError;
 use std::ops::Range;
 use std::{collections::hash_map::DefaultHasher, hash::Hasher};
 use std::hash::Hash;
@@ -11,6 +10,7 @@ pub enum Type {
     Int(i32),
     String(String),
     Bool(bool),
+    Array(Box<Vec<Expr>>),
     Struct,
     Enum,
 }
@@ -50,6 +50,15 @@ impl Variable {
             _ => {
                 panic!("Cant convert type to expression");
             }
+        }
+    }
+
+    pub fn index_to_expression(&mut self, index: usize) -> Expr {
+        match &self.data_type {
+            Type::Array(a) => {
+                return a[index].clone();
+            }
+            _ => panic!("Cant convert this type to expression"),
         }
     }
 
