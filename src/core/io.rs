@@ -1,5 +1,5 @@
 use std::io;
-use crate::ast::Expr;
+use crate::{ast::Expr, lib};
 
 pub fn print(args: Vec<Expr>) -> Option<Expr> {
     for arg in args {

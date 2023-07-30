@@ -1,6 +1,19 @@
 import core;
+import core::collections;
 
 let x = [10, 20, 30];
 
-print("x is: ", x[2]);
+let iter = 0;
+let highest = 0;
+let sum = 0;
 
+while iter < x.len() {
+    sum += x[iter];
+    if x[iter] > highest {
+        highest = x[iter];
+    }
+    iter += 1;
+}
+
+print("Highest num is: ", highest);
+print("sum is: ", sum);

@@ -255,6 +255,12 @@ impl Parser {
                     self.next_token().unwrap();
                     match self.next_token().unwrap() {
                         Token::Number(n) => index = Some(n as usize),
+                        Token::Identifier(s) => {
+                            match self.get_expr_from_identifier(s) {
+                                Expr::Number(n) => index = Some(n as usize),
+                                _ => panic!("Invalid identifier. Needs to be of type int"),
+                            }
+                        }
                         _ => panic!("Invalid token after ["),
                     }
                     self.next_token().unwrap();//gets rid of ]

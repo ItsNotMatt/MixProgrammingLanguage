@@ -1,4 +1,4 @@
-use crate::{ast::Expr, runtime::cache::Cache, data_types};
+use crate::{ast::Expr, runtime::cache::Cache, data_types, lib};
 
 
 pub fn import_math(cache: &mut Cache) {
@@ -8,7 +8,7 @@ pub fn import_math(cache: &mut Cache) {
 }
 
 pub fn add_two_nums(mut args: Vec<Expr>) -> Option<Expr> {
-    if args.len() != 2 { panic!("Function expected 2 values but received: {}", args.len())}
+    lib::validate_len(args.len(), 2);
 
     let mut res = 0;
     match args.remove(0) {

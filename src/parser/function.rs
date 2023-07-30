@@ -196,7 +196,7 @@ pub fn parse_fn_chain(parser: &mut Parser, mut expr: Expr) -> Expr {
 //not set up for custom funcs yet
 fn next_fn(parser: &mut Parser, name: &String, expr: Expr) -> Expr {
     if let Some(hash) = parser.cache.get_fn_hash(name) {
-        return parse_function(parser, hash, Some(expr), false).unwrap();
+        return parse_function(parser, hash, Some(expr), true).unwrap();
     }
     else { panic!("Cant find function by that name");}
 }

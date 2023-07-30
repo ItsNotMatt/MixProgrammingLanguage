@@ -47,6 +47,9 @@ impl Variable {
             Type::Bool(b) => {
                 return Expr::Bool(*b);
             }
+            Type::Array(a) => {
+                return Expr::Array(a.clone());
+            }
             _ => {
                 panic!("Cant convert type to expression");
             }

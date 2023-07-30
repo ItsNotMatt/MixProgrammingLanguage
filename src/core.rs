@@ -4,12 +4,14 @@ mod io;
 mod types;
 mod error;
 mod math;
+mod collections;
 
 pub fn import_module(module: &str, cache: &mut Cache) {
     println!("Trying to import module: {}", module);
     match module {
         "core" => import_default_functions(cache),
         "math" => math::import_math(cache),
+        "collections" => collections::import_collections(cache),
         _ => panic!("Cant find module"),
     }
 }
