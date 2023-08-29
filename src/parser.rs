@@ -33,7 +33,6 @@ impl Parser {
     fn next_token(&mut self) -> Option<Token> {
         if self.tokens.len() > 0 {
             if self.consume_tokens {
-//                println!("--Consuming Token: {:?}", self.tokens[self.position].clone());
                 return Some(self.tokens.remove(self.position));
             }
             else {
@@ -63,7 +62,6 @@ impl Parser {
 
     pub fn parse_tokens(&mut self, nest_start:  Option<usize>) -> Option<Expr> {
         while let Some(token) = self.next_token() {
-            println!("Parsing Token: {:?}", token);
             match token {
                 Token::Identifier(s) => {
                     self.parse_identifier(s);
@@ -82,7 +80,6 @@ impl Parser {
                     self.expression = None;
                 }
                 Token::CParen => {
-                    println!("Close paren in parse token func");
                     continue;
                 }
                 Token::OCurly => {
@@ -92,7 +89,6 @@ impl Parser {
                     self.nest -= 1;
                 }
                 Token::Eof => {
-                    println!("End of file");
                     return None;
                 }
                 _ => {
@@ -100,9 +96,7 @@ impl Parser {
                 }
             }
             if let Some(n) = nest_start {
-                println!("--Curr nest {}, start: {}", self.nest, n);
                 if self.nest == n {
-                    println!("breaking from current loop");
                     return None;
                 }
             } 
@@ -111,7 +105,6 @@ impl Parser {
     }
 
     fn parse_bin_expr(&mut self, expr: Option<Expr>) -> Expr {
-        println!("Making bin expr");
         
         let mut bin_expr = Expr::BinExpr(BinExpr {
             left: Box::new(expr.unwrap_or_else(|| self.parse_expr().unwrap())),
@@ -128,7 +121,6 @@ impl Parser {
         self.expression = Some(bin_expr.clone());
 
         if self.parse_next_expression() {
-            println!("continuing to create next bin expr");
             self.parse_bin_expr(Some(bin_expr.clone()));
         } 
         return bin_expr; //for cases when I want a return value 
@@ -136,7 +128,6 @@ impl Parser {
 
     fn parse_expr(&mut self) -> Result<Expr, ParseError> {
         let token = self.next_token().unwrap();
-        println!("Matching on {:?}, Position: {}", token, self.position);
 
         match token {
             Token::Number(n) => return Ok(Expr::Number(n)),
@@ -167,7 +158,6 @@ impl Parser {
     }
 
     fn get_expr(&mut self) -> Expr { //used when you want to check if expr ends or create a new exp
-        println!("Trying to get expr");
         let exp = self.parse_expr().unwrap();
         
         if self.parse_next_expression() {
@@ -181,7 +171,6 @@ impl Parser {
 
     fn parse_next_expression(&mut self) -> bool {
         let token = self.peek_token().unwrap();
-        //println!("Check token ahead: {:?}", token);
         match token {
             Token::Operator(_) => return true,
             Token::Number(_) => return true,
@@ -193,7 +182,6 @@ impl Parser {
     }
 
     fn parse_keyword(&mut self, key: &Key) {
-        println!("\n---Parsing key word: {:?}", key);
         
         match key {
             Key::Let => variable::assign_var(self, true),
@@ -317,7 +305,6 @@ impl Parser {
     }
 
     fn parse_array(&mut self) -> Expr {
-        println!("Parsing array");
         let mut exprs: Vec<Expr> = Vec::new();
         loop {
             match self.peek_token().unwrap() {

@@ -12,16 +12,13 @@ pub fn parse_function(parser: &mut Parser, hash: u64, expr: Option<Expr>, native
     }
     match parser.next_token().unwrap() {
         Token::OParen => {
-            println!("Parsing args. Next token: {:?}", parser.peek_token().unwrap());
             if parser.peek_token().unwrap() == &Token::CParen {
                 parser.next_token().unwrap(); //to get  rid of cparen
-                println!("Close paren hit. Calling function. Native: {}", native);
                 if native { return call_native(parser, hash, args); }
                 else { return call_custom(parser, hash, args); }
             }
             loop {
                 let expr = parser.get_expr();
-                println!("adding expr {} to args", expr);
                 args.push(expr);
                 match parser.next_token().unwrap() {
                     Token::CParen => break,
@@ -49,7 +46,6 @@ fn call_custom(parser: &mut Parser, hash: u64, args: Vec<Expr>) -> Option<Expr> 
     let return_position = parser.position;
     parser.position = func.body.start;
     parser.consume_tokens = false;
-    println!("Going to position: {}, From position: {}, to call function {}", parser.position, return_position, func.name.clone());
     let return_val = parser.parse_tokens(Some(parser.nest));
     let func = parser.cache.get_custom_from_hash(hash);
     //if return val != the key return_val expected then error
@@ -63,7 +59,6 @@ fn call_custom(parser: &mut Parser, hash: u64, args: Vec<Expr>) -> Option<Expr> 
 
     parser.position = return_position;
     remove_temp_vars(parser, hash);
-    println!("Returning to position: {:?}", parser.tokens[parser.position].clone());
 
     return_val 
 }
@@ -161,7 +156,6 @@ pub fn declare_custom(parser: &mut Parser) {
                 }
             }
             let range = save_block(parser);
-            println!("Range is: {:?}", range);
             //have to check for return value first
             
             let func = data_types::CustomFunction::new(f, temp_vars, range, return_val);
@@ -173,14 +167,12 @@ pub fn declare_custom(parser: &mut Parser) {
 
 //need to pass var to function instead of expr like in parse fn chain
 pub fn parse_var_chain(parser: &mut Parser, hash: u64) -> Expr {
-    println!("Parsing chain after var");
     let var = parser.cache.get_var_from_hash(hash);
     todo!();
 }
 
 //need to parse function and then get the return value if it has one and then use that in the chain
 pub fn parse_fn_chain(parser: &mut Parser, mut expr: Expr) -> Expr {
-    println!("Parsing chain after fn");
     match parser.next_token().unwrap() {
         Token::Identifier(s) => expr = next_fn(parser, &s, expr),
         _ => panic!("Token after . is illegal"),

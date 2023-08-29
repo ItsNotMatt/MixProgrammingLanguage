@@ -7,7 +7,6 @@ mod math;
 mod collections;
 
 pub fn import_module(module: &str, cache: &mut Cache) {
-    println!("Trying to import module: {}", module);
     match module {
         "core" => import_default_functions(cache),
         "math" => math::import_math(cache),
@@ -48,7 +47,6 @@ fn test(args: Vec<Expr>) -> Option<Expr> {
     if args.len() > 0 {
         panic!("This function doesnt take any arguments.");
     }
-    println!("test");
     None
 }
 

@@ -150,7 +150,6 @@ impl Lexer {
         while self.position < self.src.len() {
             self.ch = self.src[self.position];
             if self.ch == '"' {
-                println!("ch is quote");
                 let slice = self.src[self.read_position..self.position].to_vec();
                 let string: String = slice.iter().collect();
                 self.position += 1;
@@ -175,7 +174,6 @@ impl Lexer {
         while self.position < self.src.len() {
             self.ch = self.src[self.position];
             self.position += 1;
-            println!("Ignoring comment. Matching on {}", &self.ch);
 
             match self.ch {
                 '\n' => return,

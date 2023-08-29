@@ -24,7 +24,6 @@ fn main() {
 
     //get args  arg should be -- -t     -t to just tokenize, no args means run code
     if cli::get_args() == CLI::Tokenize {
-        println!("Just tokenizing");
         let tokens = tokenize(contents);
         for token in tokens {
             println!("Token: {:?}", token);
