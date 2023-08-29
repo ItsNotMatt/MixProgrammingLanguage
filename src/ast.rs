@@ -1,5 +1,7 @@
 use std::fmt;
 
+use crate::data_types;
+
 
 
 
@@ -14,10 +16,12 @@ pub enum Expr {
     Number(i32),
     Bool(bool),
     String(String),
+    //when its still in var form
     Identifier(String), 
     Operator(Operator),
     BinExpr(BinExpr),
     Array(Box<Vec<Expr>>),
+    Enum(data_types::Enum),
 }
 
 impl fmt::Display for Expr {
@@ -30,6 +34,7 @@ impl fmt::Display for Expr {
             Expr::Operator(o) => write!(f, "{}", o),
             Expr::BinExpr(e) => write!(f, " [{} {} {}]", e.left, e.op, e.right), 
             Expr::Array(a) => write!(f, "{{{:?}}}", a),
+            Expr::Enum(e) => write!(f, "{{{:?}}}", e),
         }
     }
 }
@@ -63,6 +68,7 @@ pub enum Key {
     Break,
     Thread,
     Import,
+    Enum,
 }
 
 #[derive(Debug, Clone, PartialEq, PartialOrd)]

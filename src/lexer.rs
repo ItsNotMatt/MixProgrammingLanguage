@@ -27,6 +27,7 @@ pub enum Token {
     Semi,
     Colon,
     DoubleColon,
+    Comment,
     Eof,
 }
 
@@ -68,6 +69,9 @@ impl Lexer {
             }
             "bool" => {
                 return Some(Token::Keyword(Key::Bool));
+            }
+            "enum" => {
+                return Some(Token::Keyword(Key::Enum));
             }
             "true" => {
                 return Some(Token::Keyword(Key::True));
@@ -167,6 +171,19 @@ impl Lexer {
         }
     }
 
+    fn ignore_comment(&mut self) {
+        while self.position < self.src.len() {
+            self.ch = self.src[self.position];
+            self.position += 1;
+            println!("Ignoring comment. Matching on {}", &self.ch);
+
+            match self.ch {
+                '\n' => return,
+                _ => continue,
+            }
+        }
+    }
+
     pub fn tokenize(&mut self) -> Vec<Token> {
         let mut tokens:Vec<Token> = Vec::new();
 
@@ -213,8 +230,9 @@ impl Lexer {
                 ':' => {
                     if self.check_ahead(':') {
                         tokens.push(Token::DoubleColon);
+                    } else {
+                        tokens.push(Token::Colon); 
                     }
-                    else { tokens.push(Token::Colon); }
                 }
                 '"' => { 
                     tokens.push(self.read_string());
@@ -222,40 +240,37 @@ impl Lexer {
                 '!' => {
                     if self.check_ahead('=') {
                         tokens.push(Token::Operator(Operator::Comparison(ComparisonOperator::NotEqual)));
-                    } 
-                    else {
+                    } else {
                         tokens.push(Token::Bang);
                     }
                 }
                 '+' => {
                     if self.check_ahead('=') {
                         tokens.push(Token::Operator(Operator::Arithmetic(ArithmeticOperator::AddEq)));
-                    } 
-                    else {
+                    } else {
                         tokens.push(Token::Operator(Operator::Arithmetic(ArithmeticOperator::Add)));
                     }
                 }
                 '-' => {
                     if self.check_ahead('=') {
                         tokens.push(Token::Operator(Operator::Arithmetic(ArithmeticOperator::SubEq)));
-                    } 
-                    else {
+                    } else {
                         tokens.push(Token::Operator(Operator::Arithmetic(ArithmeticOperator::Sub)));
                     }
                 }
                 '*' => {
                     if self.check_ahead('=') {
                         tokens.push(Token::Operator(Operator::Arithmetic(ArithmeticOperator::MultiEq)));
-                    } 
-                    else {
+                    } else {
                         tokens.push(Token::Operator(Operator::Arithmetic(ArithmeticOperator::Multi)));
                     }
                 }
                 '/' => {
                     if self.check_ahead('=') {
                         tokens.push(Token::Operator(Operator::Arithmetic(ArithmeticOperator::DivEq)));
-                    } 
-                    else {
+                    } else if self.check_ahead('/') {
+                        self.ignore_comment();
+                    } else {
                         tokens.push(Token::Operator(Operator::Arithmetic(ArithmeticOperator::Div)));
                     }
                 }

@@ -56,7 +56,6 @@ pub fn assign_var(parser: &mut Parser, mutable: bool) {
     let token = parser.next_token().unwrap();
     match token {
         Token::Identifier(s) => {
-
             let token = parser.next_token().unwrap();
             match token {//should be = after var
                 Token::Equal => {

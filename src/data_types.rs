@@ -4,6 +4,7 @@ use std::{collections::hash_map::DefaultHasher, hash::Hasher};
 use std::hash::Hash;
 
 use crate::ast::{Expr, Key};
+use crate::lib;
 
 #[derive(Debug, PartialEq, Clone, PartialOrd)]
 pub enum Type {
@@ -12,7 +13,7 @@ pub enum Type {
     Bool(bool),
     Array(Box<Vec<Expr>>),
     Struct,
-    Enum,
+    Enum(Enum),
 }
 
 
@@ -50,6 +51,9 @@ impl Variable {
             Type::Array(a) => {
                 return Expr::Array(a.clone());
             }
+//            Type::Enum(a) => {
+//                return Expr::Enum();
+//            }
             _ => {
                 panic!("Cant convert type to expression");
             }
@@ -139,3 +143,22 @@ impl TempVar {
         Variable::new(self.name.clone(), self.data_type.clone().unwrap(), true)
     }
 }
+
+#[derive(Debug, PartialEq, Clone, PartialOrd)]
+pub struct Enum {
+    pub name: String,
+    pub hash: u64,
+    pub options: Vec<String>,
+}
+
+impl Enum {
+    pub fn new(name: String, options: Vec<String>) -> Enum {
+        let hash = lib::get_hash(&name);
+        Self {
+            name,
+            hash,
+            options,
+        }
+    }
+}
+

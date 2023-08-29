@@ -1,11 +1,12 @@
 use std::{collections::{HashMap, hash_map::DefaultHasher}, hash::{Hash, Hasher}};
 
-use crate::data_types::{Variable, Function, CustomFunction};
+use crate::{data_types::{Variable, Function, CustomFunction, Enum, self}, lib};
 
 pub struct Cache {
     variables: HashMap<u64, Variable>,
     functions: HashMap<u64, Function>,
     custom_functions: HashMap<u64, CustomFunction>,
+    enums: HashMap<u64, data_types::Enum>,
 }
 
 impl Cache {
@@ -14,6 +15,7 @@ impl Cache {
             variables: HashMap::new(),
             functions: HashMap::new(),
             custom_functions: HashMap::new(),
+            enums: HashMap::new(),
         }
     }
 
@@ -114,6 +116,28 @@ impl Cache {
         }
     }
 
-}
 
+    pub fn add_enum(&mut self, enm: data_types::Enum) {
+        println!("Cache received enum {}", &enm.name);
+        self.enums.insert(enm.hash, enm);
+    }
+
+    pub fn get_enum_from_string(&mut self, name: &String) -> Option<&data_types::Enum> {
+        let mut s = DefaultHasher::new();
+        name.hash(&mut s);
+        let enm = self.enums.get(&s.finish());
+        return enm;
+    }
+
+    pub fn get_enum_hash(&mut self, name: &String) -> Option<u64> {
+        let mut s = DefaultHasher::new();
+        name.hash(&mut s);
+        if self.enums.get(&s.finish()).is_some() {
+            return Some(s.finish());
+        }
+        else {
+            return None;
+        }
+    }
+}
 

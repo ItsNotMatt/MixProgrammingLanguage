@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 #![allow(unused_imports)]
 
-use crate::{lexer::Token, ast::{Expr, BinExpr, Operator, Key, Identifier}, error::ParseError, evaluator::eval_bin_expr, runtime::cache::Cache, lib, core, parser, data_types};
+use crate::{lexer::Token, ast::{Expr, BinExpr, Operator, Key, Identifier}, error::ParseError, evaluator::eval_bin_expr, runtime::cache::Cache, lib, core, parser, data_types::{self, Variable, Enum}};
 
 mod variable;
 mod function;
@@ -207,6 +207,7 @@ impl Parser {
             } 
             Key::Fn => function::declare_custom(self),
             Key::Import => self.parse_import(),
+            Key::Enum => self.parse_enum(),
             Key::Const => variable::assign_var(self, false),
             _ => panic!("Unsupported key word"),
         }
@@ -242,6 +243,7 @@ impl Parser {
     //used to find a var and turn into expr or call a fn and return an expr
     //peek ahead to see if . after expression to edit the var or sum before returning
     fn get_expr_from_identifier(&mut self, identifier: String) -> Expr {
+        //var
         if let Some(hash) = self.cache.get_var_hash(&identifier) {
             if self.peek_token().unwrap()  == &Token::Dot {
                 self.next_token().unwrap(); //to get rid of dot
@@ -289,7 +291,7 @@ impl Parser {
             return expr; 
         }
         else {
-            panic!("Cant find identifier in this context.");
+                panic!("Cant find identifier in this context.");
         }
     }
 
@@ -331,6 +333,31 @@ impl Parser {
             };
         }
         Expr::Array(Box::new(exprs))
+    }
+
+    fn parse_enum(&mut self) {
+        match self.next_token().unwrap() {
+            Token::Identifier(s) => {
+                let mut options: Vec<String> = Vec::new();
+                match self.next_token().unwrap() {
+                    Token::OCurly => { 
+                        loop {
+                            match self.next_token().unwrap() {
+                                Token::Identifier(i) => options.push(i),
+                                Token::Comma => continue,
+                                Token::CCurly => break,
+                                _ => panic!("Invalid token inside enum decleration"),
+                            }
+                        }
+                    }
+                    _ => panic!("Invalid token after enum identifier"),
+                }
+                let enm = Enum::new(s, options);
+                self.cache.add_enum(enm);
+            }
+
+            _ => panic!("Invalid token after enum keyword. Expected identifier"),
+        }
     }
 
 }
