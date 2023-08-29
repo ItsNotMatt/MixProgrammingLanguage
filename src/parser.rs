@@ -89,7 +89,11 @@ impl Parser {
                     self.nest -= 1;
                 }
                 Token::Eof => {
+<<<<<<< HEAD
                     return None;
+=======
+                    return None ;
+>>>>>>> d8a3686dcaa966dab86f5d867e3a50bb5d0b99ec
                 }
                 _ => {
                     panic!("Cant parse token");

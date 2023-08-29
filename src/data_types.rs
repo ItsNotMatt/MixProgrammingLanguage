@@ -70,7 +70,10 @@ impl Variable {
     }
 
     pub fn reassign_data_from_expr(&mut self, expr: Expr) {
+<<<<<<< HEAD
         println!("\n----Reassigning data of {:?}, from expression {:?}----\n", self.name, expr);
+=======
+>>>>>>> d8a3686dcaa966dab86f5d867e3a50bb5d0b99ec
         match &mut self.data_type {
             Type::Int(i) => {
                 match expr {

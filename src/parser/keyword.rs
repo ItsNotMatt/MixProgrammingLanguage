@@ -10,11 +10,9 @@ pub fn parse_if(parser: &mut Parser) {
     match expr {
         Expr::Bool(b) => {
             if b {
-                println!("statement is true, entering if statement");
                 parser.parse_tokens(Some(parser.nest));//so parse_tokens knows when it hits end of block 
             }
             else {
-                println!("\n----Skipping if block----");
                 skip_block(parser);
             }
         }
@@ -24,7 +22,6 @@ pub fn parse_if(parser: &mut Parser) {
 
 //generic name incase we need it to parse something else other than else later
 pub fn parse_block(parser: &mut Parser) {
-    println!("Parsing else block");
     parser.parse_tokens(Some(parser.nest));//so parse_tokens knows when it hits end of block
 }
 
@@ -68,11 +65,9 @@ pub fn skip_block(parser: &mut Parser) { //move to parser?
             Token::Eof => panic!("Hit Eof but delimiter is missing"),
             _ => {
                 if nest == Some(0) { panic!("Missing delimiter. Curr token: {:?}", token); }
-                else { println!("Skipping token: {:?}", token); }
             }
         }
         if nest == Some(0) {
-            println!("----Skipped block----\n");
             break;
         }
     }
@@ -83,6 +78,7 @@ pub fn skip_block(parser: &mut Parser) { //move to parser?
     }
 }
 
+<<<<<<< HEAD
 pub fn save_block(parser: &mut Parser) -> Range<usize> { 
     parser.consume_tokens = false;
     let start = parser.position;
@@ -95,6 +91,24 @@ pub fn save_block(parser: &mut Parser) -> Range<usize> {
             _ => {
                 if nest == 0 { panic!("Missing delimiter. Curr token: {:?}", token); }
                 else { println!("saving token: {:?}", token); }
+=======
+pub fn parse_while(parser: &mut Parser, expr: Option<Expr>) {//need to start copying at expression not at Ocurly
+    parser.consume_tokens = false;
+    let expr = expr.unwrap_or_else(|| parser.get_expr());
+    match expr {
+        Expr::Bool(b) => {
+            if b {
+                let expr = parser.parse_tokens(Some(parser.nest));
+                //oh shit?
+                std::thread::sleep(time::Duration::from_millis(20));
+                parser.position = 0;
+                parse_while(parser, expr);
+            }
+            else {
+                parser.consume_tokens = true;
+                //clear_copied_tokens(parser);
+                skip_block(parser);
+>>>>>>> d8a3686dcaa966dab86f5d867e3a50bb5d0b99ec
             }
         }
         if nest == 0 {

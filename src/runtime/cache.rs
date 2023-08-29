@@ -20,7 +20,6 @@ impl Cache {
     }
 
     pub fn add_var(&mut self, var: Variable) {
-        println!("Cache recieved {:?}", var);
         self.variables.insert(var.hash, var);
     }
 

@@ -9,7 +9,11 @@ pub fn eval_bin_expr(expr: Expr) -> Expr  {
             }
             Operator::Comparison(op) => {
                 let ex = compare(&exp.left, &exp.right, op);
+<<<<<<< HEAD
                 return ex;;
+=======
+                return ex;
+>>>>>>> d8a3686dcaa966dab86f5d867e3a50bb5d0b99ec
             }
         }
     }

@@ -82,7 +82,11 @@ fn reassign_var(parser: &mut Parser, hash: u64, expr: Expr) {
         Type::Int(i) => {
              match expr {
                  Expr::Number(n) => {
+<<<<<<< HEAD
                      *i = n;
+=======
+                     i.value = n;
+>>>>>>> d8a3686dcaa966dab86f5d867e3a50bb5d0b99ec
                  }
                  _ => panic!("Unsupported reassignment to var, cant reassign var to this type"),
              }

@@ -1,0 +1,13 @@
+let guess = input("Give me a num").to_int(); 
+let rand = 72;
+
+while guess != rand { 
+  if guess > rand { 
+    let response = "Too high"; 
+  } 
+  if guess < rand { 
+    let response = "Too low"; 
+  } 
+  guess = input(response).to_int(); 
+} 
+print("You won!");
